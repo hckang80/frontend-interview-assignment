@@ -78,7 +78,7 @@ export const downloadPdf = async (file: File) => {
     const blob = new Blob([pdfBytes], { type: 'application/pdf' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
-    link.download = 'download.pdf';
+    link.download = file.name;
     link.click();
 
     URL.revokeObjectURL(link.href);
