@@ -15,8 +15,9 @@ export const pdfFileToImage = async (
   const pdf = await pdfjsLib.getDocument(pdfUrl).promise;
 
   const renderPageToImage = async (): Promise<string> => {
-    const page = await pdf.getPage(0);
-    const viewport = page.getViewport({ scale: 5 });
+    const page = await pdf.getPage(1);
+
+    const viewport = page.getViewport({ scale: 1 });
 
     const canvas = document.createElement('canvas');
     const context = canvas.getContext('2d');
