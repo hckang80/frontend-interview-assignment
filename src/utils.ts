@@ -1,3 +1,4 @@
+import { PDFDocument } from 'pdf-lib';
 import * as pdfjsLib from 'pdfjs-dist';
 import workerSrc from 'pdfjs-dist/build/pdf.worker?url';
 
@@ -45,6 +46,44 @@ export const getImageByPdf = async (
   } catch (error) {
     console.error(`Error rendering page ${pageNumber}:`, error);
     throw new Error(`Failed to render page ${pageNumber}.`);
+  }
+};
+
+export const downloadPdf = async (file: File) => {
+  if (!file) return;
+
+  try {
+    const pdfDoc = await PDFDocument.create();
+
+    const { pdf, totalPages } = await loadPdf(file);
+
+    for (let pageNumber = 1; pageNumber <= totalPages; pageNumber++) {
+      const image = await getImageByPdf(pdf, pageNumber);
+      const imageBytes = await fetch(image).then((res) => res.arrayBuffer());
+      const pdfImage = await pdfDoc.embedPng(imageBytes);
+
+      const { width, height } = pdfImage.scale(1);
+      const page = pdfDoc.addPage([width, height]);
+
+      page.drawImage(pdfImage, {
+        x: 0,
+        y: 0,
+        width,
+        height
+      });
+    }
+
+    const pdfBytes = await pdfDoc.save();
+
+    const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'download.pdf';
+    link.click();
+
+    URL.revokeObjectURL(link.href);
+  } catch (error) {
+    console.error('Error generating PDF:', error);
   }
 };
 

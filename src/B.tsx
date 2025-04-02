@@ -3,7 +3,7 @@ import { useStore } from '@/store';
 
 import * as fabric from 'fabric';
 
-import { loadPdf, getImageByPdf } from './utils';
+import { loadPdf, getImageByPdf, downloadPdf } from './utils';
 import './B.css';
 
 const FABRIC_CANVAS_WIDTH = 500;
@@ -14,8 +14,6 @@ const B = () => {
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const fabricCanvasRef = useRef<fabric.Canvas | null>(null);
-
-  const handlePDFDownload = async () => {};
 
   useEffect(() => {
     if (!file || !canvasRef.current) return;
@@ -59,9 +57,11 @@ const B = () => {
       <div>
         <canvas ref={canvasRef} />
 
-        <button type="button" onClick={handlePDFDownload}>
-          PDF 다운로드
-        </button>
+        {file && (
+          <button type="button" onClick={() => downloadPdf(file)}>
+            PDF 다운로드
+          </button>
+        )}
       </div>
     </div>
   );
