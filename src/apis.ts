@@ -1,7 +1,7 @@
-import axios from "axios";
+import axios from 'axios';
 
 const apis = axios.create({
-  baseURL: "",
+  baseURL: ''
 });
 
 apis.interceptors.request.use(

@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
-import { useStore } from "@/store";
+import { useEffect, useState } from 'react';
+import { useStore } from '@/store';
 
-import "./C.css";
-import { getImageByFile } from "./utils";
+import './C.css';
+import { getImageByFile } from './utils';
 
 const C = () => {
   const { file } = useStore();
@@ -12,7 +12,7 @@ const C = () => {
     if (!file) return;
 
     (async () => {
-      setFileImage((await getImageByFile(file)) ?? "");
+      setFileImage((await getImageByFile(file)) ?? '');
     })();
   }, [file]);
 

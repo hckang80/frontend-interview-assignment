@@ -1,8 +1,8 @@
-import { useRef } from "react";
-import { useStore } from "@/store";
+import { useRef } from 'react';
+import { useStore } from '@/store';
 
-import "./A.css";
-import Stamp1 from "./files/stamp-1.jpg";
+import './A.css';
+import Stamp1 from './files/stamp-1.jpg';
 
 const A = () => {
   const { file, setFile } = useStore();
@@ -15,7 +15,7 @@ const A = () => {
 
     setFile(file!);
 
-    e.target.value = "";
+    e.target.value = '';
   };
 
   const handleStampUpload = () => {
@@ -41,7 +41,7 @@ const A = () => {
               ref={pdfInputRef}
               type="file"
               onChange={handlePDFChange}
-              style={{ display: "none" }}
+              style={{ display: 'none' }}
             />
 
             <button type="button" onClick={handlePDFUpload}>
@@ -53,11 +53,7 @@ const A = () => {
             {!!file?.name && (
               <>
                 📄 파일명: <strong>{file?.name}</strong>
-                <button
-                  type="button"
-                  className="pdfFileRemove"
-                  onClick={handlePDFRemove}
-                >
+                <button type="button" className="pdfFileRemove" onClick={handlePDFRemove}>
                   X
                 </button>
               </>
@@ -72,7 +68,7 @@ const A = () => {
               type="file"
               accept=".png"
               onChange={() => {}}
-              style={{ display: "none" }}
+              style={{ display: 'none' }}
             />
             <button type="button" onClick={handleStampUpload}>
               도장 업로드

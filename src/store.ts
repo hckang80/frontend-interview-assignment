@@ -1,4 +1,4 @@
-import { create } from "zustand";
+import { create } from 'zustand';
 
 type Store = {
   file: File | null;
@@ -7,5 +7,5 @@ type Store = {
 
 export const useStore = create<Store>((set) => ({
   file: null,
-  setFile: (file: File | null) => set({ file }),
+  setFile: (file: File | null) => set({ file })
 }));

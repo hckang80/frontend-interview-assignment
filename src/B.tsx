@@ -1,15 +1,13 @@
-import { useEffect, useRef } from "react";
-import { useStore } from "@/store";
+import { useEffect, useRef } from 'react';
+import { useStore } from '@/store';
 
-import * as fabric from "fabric";
+import * as fabric from 'fabric';
 
-import { getImageByFile } from "./utils";
-import "./B.css";
+import { getImageByFile } from './utils';
+import './B.css';
 
 const FABRIC_CANVAS_WIDTH = 500;
-const FABRIC_CANVAS_HEIGHT = parseFloat(
-  (FABRIC_CANVAS_WIDTH * Math.sqrt(2)).toFixed(2)
-);
+const FABRIC_CANVAS_HEIGHT = parseFloat((FABRIC_CANVAS_WIDTH * Math.sqrt(2)).toFixed(2));
 
 const B = () => {
   const { file } = useStore();
@@ -25,7 +23,7 @@ const B = () => {
     fabricCanvasRef.current = new fabric.Canvas(canvasRef.current, {
       width: FABRIC_CANVAS_WIDTH,
       height: FABRIC_CANVAS_HEIGHT,
-      selection: false,
+      selection: false
     });
 
     (async () => {
@@ -34,7 +32,7 @@ const B = () => {
       const img = await fabric.FabricImage.fromURL(image!);
 
       img.set({
-        objectCaching: false,
+        objectCaching: false
       });
 
       fabricCanvasRef.current!.backgroundImage = img;

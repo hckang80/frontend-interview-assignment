@@ -1,8 +1,8 @@
-import A from "./A";
-import B from "./B";
-import C from "./C";
+import A from './A';
+import B from './B';
+import C from './C';
 
-import "./App.css";
+import './App.css';
 
 function App() {
   return (
