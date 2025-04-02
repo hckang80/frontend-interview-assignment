@@ -45,6 +45,13 @@ const B = () => {
       fabricCanvasRef.current!.backgroundImage = img;
       fabricCanvasRef.current?.requestRenderAll();
     })();
+
+    return () => {
+      if (fabricCanvasRef.current) {
+        fabricCanvasRef.current.dispose();
+        fabricCanvasRef.current = null;
+      }
+    };
   }, [file, selectedPageIndex]);
 
   return (
