@@ -60,7 +60,7 @@ const B = () => {
         <canvas ref={canvasRef} />
 
         <button type="button" onClick={handlePDFDownload}>
-          PDF 다운로드 {selectedPageIndex}
+          PDF 다운로드
         </button>
       </div>
     </div>
