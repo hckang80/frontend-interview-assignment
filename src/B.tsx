@@ -3,7 +3,7 @@ import { useStore } from '@/store';
 
 import * as fabric from 'fabric';
 
-import { getImageByFile } from './utils';
+import { loadPdf, getImageByPdf } from './utils';
 import './B.css';
 
 const FABRIC_CANVAS_WIDTH = 500;
@@ -27,7 +27,8 @@ const B = () => {
     });
 
     (async () => {
-      const image = await getImageByFile(file);
+      const { pdf } = await loadPdf(file);
+      const image = await getImageByPdf(pdf, 1);
 
       const img = await fabric.FabricImage.fromURL(image!);
 
