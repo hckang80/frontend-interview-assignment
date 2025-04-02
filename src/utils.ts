@@ -32,7 +32,7 @@ export const getImageByPdf = async (
 ): Promise<string> => {
   try {
     const page = await pdf.getPage(pageNumber);
-    const viewport = page.getViewport({ scale: 1 });
+    const viewport = page.getViewport({ scale: 3 });
 
     const canvas = document.createElement('canvas');
     const context = canvas.getContext('2d');
