@@ -31,8 +31,14 @@ const B = () => {
       const image = await getImageByPdf(pdf, 1);
 
       const img = await fabric.FabricImage.fromURL(image!);
+      const scaleX = FABRIC_CANVAS_WIDTH / img.width;
+      const scaleY = FABRIC_CANVAS_HEIGHT / img.height;
 
       img.set({
+        scaleX,
+        scaleY,
+        left: 0,
+        top: 0,
         objectCaching: false
       });
 
