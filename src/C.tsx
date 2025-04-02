@@ -5,7 +5,7 @@ import './C.css';
 import { getImageByPdf, loadPdf } from './utils';
 
 const C = () => {
-  const { file } = useStore();
+  const { file, setSelectedPageIndex } = useStore();
   const [fileImages, setFileImages] = useState<string[]>([]);
 
   useEffect(() => {
@@ -27,7 +27,7 @@ const C = () => {
     <div className="C">
       <div className="top">
         {fileImages.map((image, index) => (
-          <div key={index}>
+          <div key={index} onClick={() => setSelectedPageIndex(index + 1)}>
             <div className="image">
               <img src={image} alt="" />
             </div>

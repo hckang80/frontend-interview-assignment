@@ -10,7 +10,7 @@ const FABRIC_CANVAS_WIDTH = 500;
 const FABRIC_CANVAS_HEIGHT = parseFloat((FABRIC_CANVAS_WIDTH * Math.sqrt(2)).toFixed(2));
 
 const B = () => {
-  const { file } = useStore();
+  const { file, selectedPageIndex } = useStore();
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const fabricCanvasRef = useRef<fabric.Canvas | null>(null);
@@ -28,7 +28,7 @@ const B = () => {
 
     (async () => {
       const { pdf } = await loadPdf(file);
-      const image = await getImageByPdf(pdf, 1);
+      const image = await getImageByPdf(pdf, selectedPageIndex);
 
       const img = await fabric.FabricImage.fromURL(image!);
       const scaleX = FABRIC_CANVAS_WIDTH / img.width;
@@ -45,7 +45,7 @@ const B = () => {
       fabricCanvasRef.current!.backgroundImage = img;
       fabricCanvasRef.current?.requestRenderAll();
     })();
-  }, [file]);
+  }, [file, selectedPageIndex]);
 
   return (
     <div className="B">
@@ -53,7 +53,7 @@ const B = () => {
         <canvas ref={canvasRef} />
 
         <button type="button" onClick={handlePDFDownload}>
-          PDF 다운로드
+          PDF 다운로드 {selectedPageIndex}
         </button>
       </div>
     </div>
