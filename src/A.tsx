@@ -40,6 +40,7 @@ const A = () => {
             <input
               ref={pdfInputRef}
               type="file"
+              accept=".pdf, .png"
               onChange={handlePDFChange}
               style={{ display: 'none' }}
             />
