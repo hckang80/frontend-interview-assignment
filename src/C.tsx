@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useStore } from '@/store';
 
 import './C.css';
-import { getImageByFile } from './utils';
+import { getImageByPdf, loadPdf } from './utils';
 
 const C = () => {
   const { file } = useStore();
@@ -12,7 +12,9 @@ const C = () => {
     if (!file) return;
 
     (async () => {
-      setFileImage((await getImageByFile(file)) ?? '');
+      const { totalPages, pdf } = await loadPdf(file);
+      console.log({ totalPages });
+      setFileImage((await getImageByPdf(pdf)) ?? '');
     })();
   }, [file]);
 
