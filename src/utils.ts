@@ -20,6 +20,8 @@ export const loadPdf = async (
   } catch (error) {
     console.error('Error loading PDF:', error);
     throw new Error('Failed to load PDF file.');
+  } finally {
+    URL.revokeObjectURL(pdfUrl);
   }
 };
 
