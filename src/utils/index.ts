@@ -75,12 +75,8 @@ export const downloadPdf = async (file: File) => {
     const pdfBytes = await pdfDoc.save();
 
     const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = file.name;
-    link.click();
 
-    URL.revokeObjectURL(link.href);
+    download(blob, file.name);
   } catch (error) {
     console.error('Error generating PDF:', error);
   }
@@ -147,3 +143,12 @@ export const singleton = (() => {
     return instance;
   };
 })();
+
+export const download = (blob: Blob, fileName: string) => {
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = fileName;
+  link.click();
+
+  URL.revokeObjectURL(link.href);
+};
