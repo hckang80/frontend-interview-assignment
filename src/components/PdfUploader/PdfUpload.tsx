@@ -1,4 +1,4 @@
-import React, { useRef, useCallback } from 'react';
+import React, { useRef, useCallback, memo } from 'react';
 import * as styles from './PdfUploader.css';
 
 interface PdfUploadProps {
@@ -59,4 +59,4 @@ const PdfUpload: React.FC<PdfUploadProps> = ({ originFile, setOriginFile, handle
   );
 };
 
-export default PdfUpload;
+export default memo(PdfUpload);

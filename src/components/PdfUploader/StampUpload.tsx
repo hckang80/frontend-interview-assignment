@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { memo, useRef } from 'react';
 import * as styles from './PdfUploader.css';
 import { Stamp } from '@/types';
 
@@ -52,4 +52,4 @@ const StampUpload: React.FC<StampUploadProps> = ({
   );
 };
 
-export default StampUpload;
+export default memo(StampUpload);

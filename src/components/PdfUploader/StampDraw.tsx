@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import * as styles from './PdfUploader.css';
 import { Stamp } from '@/types';
 
@@ -25,4 +25,4 @@ const StampDraw: React.FC<StampDrawProps> = ({ originFile, stamps, handleStampDr
   );
 };
 
-export default StampDraw;
+export default memo(StampDraw);
