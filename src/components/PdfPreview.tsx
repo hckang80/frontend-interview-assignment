@@ -29,7 +29,7 @@ const PdfPreview = () => {
       const { pdf } = await loadPdf(file);
       const image = await getImageByPdf(pdf, selectedPageIndex);
 
-      const img = await fabric.FabricImage.fromURL(image!);
+      const img = await fabric.FabricImage.fromURL(image);
       const scaleX = FABRIC_CANVAS_WIDTH / img.width;
       const scaleY = FABRIC_CANVAS_HEIGHT / img.height;
 
@@ -41,8 +41,10 @@ const PdfPreview = () => {
         objectCaching: false
       });
 
-      fabricCanvasRef.current!.backgroundImage = img;
-      fabricCanvasRef.current?.requestRenderAll();
+      if (fabricCanvasRef.current) {
+        fabricCanvasRef.current.backgroundImage = img;
+        fabricCanvasRef.current.requestRenderAll();
+      }
     })();
 
     return () => {
