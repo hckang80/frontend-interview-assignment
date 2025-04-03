@@ -8,9 +8,8 @@ export const container = style({
   height: '100%'
 });
 
-export const canvas = style({
-  width: '100%',
-  height: '100%'
+export const image = style({
+  width: '500px'
 });
 
 export const button = style({
