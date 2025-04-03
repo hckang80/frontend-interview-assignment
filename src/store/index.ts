@@ -8,6 +8,7 @@ type Store = {
   selectedPageIndex: number;
   setSelectedPageIndex: (index: number) => void;
   printedFile: () => File | null;
+  resetFile: () => void;
 };
 
 export const useStore = create<Store>((set, get) => ({
@@ -20,5 +21,11 @@ export const useStore = create<Store>((set, get) => ({
   printedFile: () => {
     const { signedFile, originFile } = get();
     return signedFile || originFile;
+  },
+  resetFile: () => {
+    const { setSignedFile, setOriginFile, setSelectedPageIndex } = get();
+    setSignedFile(null);
+    setOriginFile(null);
+    setSelectedPageIndex(1);
   }
 }));
