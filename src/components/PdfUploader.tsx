@@ -145,7 +145,11 @@ const PdfUploader = () => {
           <div className={styles.stamps}>
             {stamps.map((stamp, index) => (
               <button
-                className={index === selectedStampIndex ? 'active' : ''}
+                className={
+                  stamps.length > 1 && index === selectedStampIndex
+                    ? styles.stampButtonActive
+                    : styles.stampButton
+                }
                 key={index}
                 onClick={() => setSelectedStampIndex(index)}
               >

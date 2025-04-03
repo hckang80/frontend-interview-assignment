@@ -23,11 +23,23 @@ export const stamps = style({
   minHeight: '54px'
 });
 
-export const stampImage = style({
-  cursor: 'pointer',
+export const stampButton = style({
+  overflow: 'hidden',
   width: '48px',
   height: '48px',
   borderRadius: '4px'
+});
+
+export const stampButtonActive = style([
+  stampButton,
+  {
+    outline: '2px solid #5e5e5e'
+  }
+]);
+
+export const stampImage = style({
+  width: '100%',
+  height: '100%'
 });
 
 export const pdfUpload = style({
