@@ -125,3 +125,14 @@ export const optimizeImage = (file: File, maxWidth = 200, maxHeight = 200): Prom
     };
   });
 };
+
+export const singleton = (() => {
+  let instance: any = null;
+
+  return <T>(fn: T): T => {
+    if (!instance) {
+      instance = fn;
+    }
+    return instance;
+  };
+})();
