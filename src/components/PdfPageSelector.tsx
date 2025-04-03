@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useStore } from '@/store/index';
 
-import './PdfPageSelector.css';
+import * as styles from './PdfPageSelector.css.ts';
 import { getImageByPdf, loadPdf } from '../utils';
 
 const C = () => {
@@ -25,15 +25,15 @@ const C = () => {
   }, [file]);
 
   return (
-    <div className="C">
-      <div className="top">
+    <div className={styles.container}>
+      <div className={styles.top}>
         {file &&
           fileImages.map((image, index) => (
             <div key={index} onClick={() => setSelectedPageIndex(index + 1)}>
-              <div className="image">
-                <img src={image} alt="" />
+              <div className={styles.image}>
+                <img src={image} alt="" className={styles.imageContent} />
               </div>
-              <div className="imageIndex">{index + 1}</div>
+              <div className={styles.imageIndex}>{index + 1}</div>
             </div>
           ))}
       </div>

@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 import { useStore } from '@/store/index';
 
-import './PdfUploader.css';
+import * as styles from './PdfUploader.css';
 import { PDFDocument, type PDFPage } from 'pdf-lib';
 import { singleton, optimizeImage } from '@/utils';
 
@@ -104,10 +104,10 @@ const A = () => {
   };
 
   return (
-    <div className="A">
-      <div className="top">
+    <div className={styles.container}>
+      <div className={styles.top}>
         <div>
-          <div className="pdfUpload">
+          <div className={styles.pdfUpload}>
             <input
               ref={pdfInputRef}
               type="file"
@@ -116,16 +116,16 @@ const A = () => {
               style={{ display: 'none' }}
             />
 
-            <button type="button" onClick={handlePDFUpload}>
+            <button type="button" onClick={handlePDFUpload} className={styles.button}>
               PDF 업로드
             </button>
           </div>
 
-          <div className="pdfFile">
+          <div className={styles.pdfFile}>
             {!!originFile?.name && (
               <>
                 📄 파일명: <strong>{originFile?.name}</strong>
-                <button type="button" className="pdfFileRemove" onClick={handlePDFRemove}>
+                <button type="button" className={styles.pdfFileRemove} onClick={handlePDFRemove}>
                   X
                 </button>
               </>
@@ -134,7 +134,7 @@ const A = () => {
         </div>
 
         <div>
-          <div className="stampUpload">
+          <div className={styles.stampUpload}>
             <input
               ref={stampInputRef}
               type="file"
@@ -143,28 +143,32 @@ const A = () => {
               onChange={handleStampChange}
               style={{ display: 'none' }}
             />
-            <button type="button" onClick={handleStampUpload}>
+            <button type="button" onClick={handleStampUpload} className={styles.button}>
               도장 업로드
             </button>
           </div>
 
-          <div className="stamps">
+          <div className={styles.stamps}>
             {stamps.map((stamp, index) => (
               <button
                 className={index === selectedStampIndex ? 'active' : ''}
                 key={index}
                 onClick={() => setSelectedStampIndex(index)}
               >
-                <img src={stamp} alt="" />
+                <img src={stamp} alt="" className={styles.stampImage} />
               </button>
             ))}
           </div>
         </div>
       </div>
 
-      <div className="bottom">
+      <div className={styles.bottom}>
         {originFile && (
-          <button type="button" onClick={() => handleStampDraw(originFile)}>
+          <button
+            type="button"
+            onClick={() => handleStampDraw(originFile)}
+            className={styles.button}
+          >
             도장 찍기
           </button>
         )}

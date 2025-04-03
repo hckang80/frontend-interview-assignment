@@ -4,7 +4,7 @@ import { useStore } from '@/store/index';
 import * as fabric from 'fabric';
 
 import { loadPdf, getImageByPdf, downloadPdf } from '../utils';
-import './PdfPreview.css';
+import * as styles from './PdfPreview.css.ts';
 
 const FABRIC_CANVAS_WIDTH = 500;
 const FABRIC_CANVAS_HEIGHT = parseFloat((FABRIC_CANVAS_WIDTH * Math.sqrt(2)).toFixed(2));
@@ -54,12 +54,12 @@ const B = () => {
   }, [file, selectedPageIndex]);
 
   return (
-    <div className="B">
+    <div className={styles.container}>
       <div>
-        <canvas ref={canvasRef} />
+        <canvas ref={canvasRef} className={styles.canvas} />
 
         {file && (
-          <button type="button" onClick={() => downloadPdf(file)}>
+          <button type="button" onClick={() => downloadPdf(file)} className={styles.button}>
             PDF 다운로드
           </button>
         )}

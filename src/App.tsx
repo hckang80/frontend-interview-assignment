@@ -2,7 +2,7 @@ import PdfUploader from './components/PdfUploader';
 import PdfPreview from './components/PdfPreview';
 import PdfPageSelector from './components/PdfPageSelector';
 
-import './App.css';
+import './app.css.ts';
 
 function App() {
   return (
