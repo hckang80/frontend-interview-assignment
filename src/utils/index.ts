@@ -87,7 +87,7 @@ export const downloadPdf = async (file: File) => {
   }
 };
 
-export const resizeImage = (file: File, maxWidth = 200, maxHeight = 200): Promise<string> => {
+export const optimizeImage = (file: File, maxWidth = 200, maxHeight = 200): Promise<string> => {
   return new Promise((resolve, reject) => {
     const img = new Image();
     img.crossOrigin = 'anonymous';

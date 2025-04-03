@@ -3,7 +3,7 @@ import { useStore } from '@/store/index';
 
 import './PdfUploader.css';
 import { PDFDocument, type PDFPage } from 'pdf-lib';
-import { resizeImage } from '@/utils';
+import { optimizeImage } from '@/utils';
 
 const A = () => {
   const { originFile, setOriginFile, setSignedFile } = useStore();
@@ -32,7 +32,7 @@ const A = () => {
     const { files } = e.target;
     if (!files || files.length === 0) return;
 
-    const newStamps = await Promise.all(Array.from(files).map((file) => resizeImage(file)));
+    const newStamps = await Promise.all(Array.from(files).map((file) => optimizeImage(file)));
 
     setStamps((prevStamps) => {
       prevStamps.forEach((stamp) => URL.revokeObjectURL(stamp));
