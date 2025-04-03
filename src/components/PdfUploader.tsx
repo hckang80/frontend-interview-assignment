@@ -40,7 +40,7 @@ const PdfUploader = () => {
     setStamps((prevStamps) => {
       prevStamps.forEach((stamp) => URL.revokeObjectURL(stamp));
       const updatedStamps = [...prevStamps, ...newStamps];
-      return updatedStamps.slice(0, 5);
+      return updatedStamps.slice(-5);
     });
 
     e.target.value = '';
