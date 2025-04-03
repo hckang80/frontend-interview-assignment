@@ -91,35 +91,47 @@ export const optimizeImage = (file: File, maxWidth = 200, maxHeight = 200): Prom
   return new Promise((resolve, reject) => {
     const img = new Image();
     img.crossOrigin = 'anonymous';
-    img.src = URL.createObjectURL(file);
+    const objectUrl = URL.createObjectURL(file);
+    img.src = objectUrl;
 
-    img.onload = () => {
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
+    const cleanup = () => {
+      URL.revokeObjectURL(objectUrl);
+    };
 
-      let { width, height } = img;
+    const processImage = () => {
+      try {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
 
-      if (width > maxWidth || height > maxHeight) {
-        if (width / height > maxWidth / maxHeight) {
-          height = (height * maxWidth) / width;
-          width = maxWidth;
-        } else {
-          width = (width * maxHeight) / height;
-          height = maxHeight;
+        let { width, height } = img;
+
+        if (width > maxWidth || height > maxHeight) {
+          if (width / height > maxWidth / maxHeight) {
+            height = (height * maxWidth) / width;
+            width = maxWidth;
+          } else {
+            width = (width * maxHeight) / height;
+            height = maxHeight;
+          }
         }
-      }
 
-      canvas.width = width;
-      canvas.height = height;
+        canvas.width = width;
+        canvas.height = height;
 
-      if (ctx) {
+        if (!ctx) {
+          throw new Error('Canvas context not available');
+        }
+
         ctx.drawImage(img, 0, 0, width, height);
         resolve(canvas.toDataURL('image/png'));
-      } else {
-        reject(new Error('Canvas context not available'));
+      } catch (error) {
+        reject(error);
+      } finally {
+        cleanup();
       }
     };
 
+    img.onload = processImage;
     img.onerror = (error) => {
       reject(error);
     };
