@@ -50,8 +50,6 @@ export const getImageByPdf = async (
 };
 
 export const downloadPdf = async (file: File) => {
-  if (!file) return;
-
   try {
     const pdfDoc = await PDFDocument.create();
 
