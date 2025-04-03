@@ -3,6 +3,7 @@ import { useStore } from '@/store/index';
 
 import './PdfUploader.css';
 import { PDFDocument, type PDFPage } from 'pdf-lib';
+import { convertToPng } from '@/utils';
 
 const A = () => {
   const { file, setFile } = useStore();
@@ -66,14 +67,16 @@ const A = () => {
       const stamp = stamps[selectedStampIndex];
 
       try {
-        const response = await fetch(stamp);
+        const pngDataUrl = await convertToPng(stamp);
+        const response = await fetch(pngDataUrl);
         const imageData = await response.arrayBuffer();
 
-        const embeddedImage = await pdfDoc.embedJpg(imageData);
-        const { width: imageWidth, height: imageHeight } = embeddedImage.scale(1);
+        const embeddedImage = await pdfDoc.embedPng(imageData);
         const { width: pageWidth, height: pageHeight } = page.getSize();
-        const scaledWidth = 100;
-        const scaledHeight = (imageHeight / imageWidth) * scaledWidth;
+
+        const scaledWidth = pageWidth * 0.3;
+        const scaledHeight = (embeddedImage.height / embeddedImage.width) * scaledWidth;
+
         const x = (pageWidth - scaledWidth) / 2;
         const y = (pageHeight - scaledHeight) / 2;
 
