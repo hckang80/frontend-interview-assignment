@@ -6,7 +6,7 @@ import { PDFDocument, type PDFPage } from 'pdf-lib';
 import { singleton, optimizeImage } from '@/utils';
 
 const PdfUploader = () => {
-  const { originFile, setOriginFile, setSignedFile } = useStore();
+  const { originFile, setOriginFile, setSignedFile, resetFile } = useStore();
 
   const stampInputRef = useRef<HTMLInputElement>(null);
   const pdfInputRef = useRef<HTMLInputElement>(null);
@@ -19,8 +19,8 @@ const PdfUploader = () => {
 
     const [file] = files;
 
+    resetFile();
     setOriginFile(file);
-    setSignedFile(null);
 
     e.target.value = '';
   };
@@ -51,8 +51,7 @@ const PdfUploader = () => {
   };
 
   const handlePDFRemove = () => {
-    setOriginFile(null);
-    setSignedFile(null);
+    resetFile();
   };
 
   const handleStampDraw = async (file: File) => {
