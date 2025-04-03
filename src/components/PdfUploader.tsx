@@ -63,31 +63,25 @@ const PdfUploader = () => {
     setSelectedStampIndex(0);
   };
 
-  const handleStampClick = async (index: number, file: File | null) => {
-    if (!file) return;
-    setSelectedStampIndex(index);
-    setSignedFile(await getUpdatedFile(file, index));
+  const handleStampDraw = async (file: File) => {
+    setSignedFile(await getUpdatedFile(file));
   };
 
-  const handleStampDraw = async (file: File, stampIndex: number) => {
-    setSignedFile(await getUpdatedFile(file, stampIndex));
-  };
-
-  const getUpdatedFile = async (file: File, stampIndex: number) => {
+  const getUpdatedFile = async (file: File) => {
     const fileArrayBuffer = await file.arrayBuffer();
     const pdfDoc = await PDFDocument.load(fileArrayBuffer);
     const pages = pdfDoc.getPages();
 
-    await drawStamp(pdfDoc, pages, stampIndex);
+    await drawStamp(pdfDoc, pages);
 
     const pdfBytes = await pdfDoc.save();
     const pdfBlob = new Blob([pdfBytes], { type: 'application/pdf' });
     return new File([pdfBlob], file.name, { type: 'application/pdf' });
   };
 
-  const drawStamp = async (pdfDoc: PDFDocument, pages: PDFPage[], stampIndex: number) => {
+  const drawStamp = async (pdfDoc: PDFDocument, pages: PDFPage[]) => {
     for (const page of pages) {
-      const stamp = stamps[stampIndex - 1];
+      const stamp = stamps[selectedStampIndex - 1];
 
       try {
         const response = await fetch(stamp.url);
@@ -166,7 +160,7 @@ const PdfUploader = () => {
                   index + 1 === selectedStampIndex ? styles.stampButtonActive : styles.stampButton
                 }
                 key={id}
-                onClick={() => handleStampClick(index + 1, originFile)}
+                onClick={() => setSelectedStampIndex(index + 1)}
               >
                 <img src={url} alt="" className={styles.stampImage} />
               </button>
@@ -180,7 +174,7 @@ const PdfUploader = () => {
           <button
             disabled={!selectedStampIndex}
             type="button"
-            onClick={() => handleStampDraw(originFile, selectedStampIndex)}
+            onClick={() => handleStampDraw(originFile)}
             className={styles.button}
           >
             도장 찍기
