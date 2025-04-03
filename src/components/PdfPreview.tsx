@@ -8,6 +8,7 @@ const PdfPreview = () => {
   const { previewFile, signedFile, selectedPageIndex } = useStore();
   const file = previewFile();
   const [fileImage, setFileImage] = useState('');
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (!file) return setFileImage('');
@@ -20,18 +21,26 @@ const PdfPreview = () => {
     })();
   }, [file, selectedPageIndex]);
 
+  const handleDownload = async () => {
+    if (!file) return;
+
+    setLoading(true);
+    await downloadPdf(file);
+    setLoading(false);
+  };
+
   return (
     <div className={styles.container}>
       {file && fileImage ? (
         <>
           <img src={fileImage} alt="" className={styles.image} />
           <button
-            disabled={!signedFile}
+            disabled={!signedFile || loading}
             type="button"
-            onClick={() => downloadPdf(file)}
+            onClick={handleDownload}
             className={styles.button}
           >
-            PDF 다운로드
+            {loading ? '다운로드 중....' : 'PDF 다운로드'}
           </button>
         </>
       ) : (
