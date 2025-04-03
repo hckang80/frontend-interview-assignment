@@ -57,7 +57,7 @@ const A = () => {
 
     const pdfBytes = await pdfDoc.save();
     const pdfBlob = new Blob([pdfBytes], { type: 'application/pdf' });
-    const updatedFile = new File([pdfBlob], `signed_${file.name}`, { type: 'application/pdf' });
+    const updatedFile = new File([pdfBlob], file.name, { type: 'application/pdf' });
 
     setFile(updatedFile);
   };
