@@ -1,9 +1,10 @@
-import React, { useRef, useState, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useStore } from '@/store/index';
 
 import * as styles from './PdfUploader.css';
 import { PDFDocument, type PDFPage } from 'pdf-lib';
 import { singleton, optimizeImage } from '@/utils';
+import { PdfUpload, StampUpload, StampDraw } from '.';
 
 type StampType = {
   id: string;
@@ -13,33 +14,12 @@ type StampType = {
 const PdfUploader = () => {
   const { originFile, setOriginFile, setSignedFile, resetFile } = useStore();
 
-  const stampInputRef = useRef<HTMLInputElement>(null);
-  const pdfInputRef = useRef<HTMLInputElement>(null);
   const [stamps, setStamps] = useState<StampType[]>([]);
   const [selectedStampIndex, setSelectedStampIndex] = useState(0);
 
   const handlePDFRemove = () => {
     resetFile();
     setSelectedStampIndex(0);
-  };
-
-  const handlePDFChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const { files } = e.target;
-      if (!files) return;
-
-      const [file] = files;
-
-      handlePDFRemove();
-      setOriginFile(file);
-
-      e.target.value = '';
-    },
-    [setOriginFile, handlePDFRemove]
-  );
-
-  const handleStampUpload = () => {
-    stampInputRef.current?.click();
   };
 
   const handleStampChange = useCallback(
@@ -64,10 +44,6 @@ const PdfUploader = () => {
     },
     [setStamps]
   );
-
-  const handlePDFUpload = () => {
-    pdfInputRef.current?.click();
-  };
 
   const getUpdatedFile = useCallback(
     async (file: File) => {
@@ -123,75 +99,21 @@ const PdfUploader = () => {
   return (
     <div className={styles.container}>
       <div className={styles.top}>
-        <div>
-          <div className={styles.pdfUpload}>
-            <input
-              ref={pdfInputRef}
-              type="file"
-              accept=".pdf"
-              onChange={handlePDFChange}
-              style={{ display: 'none' }}
-            />
-
-            <button type="button" onClick={handlePDFUpload} className={styles.button}>
-              PDF 업로드
-            </button>
-          </div>
-
-          <div className={styles.pdfFile}>
-            {!!originFile?.name && (
-              <>
-                📄 파일명: <strong>{originFile?.name}</strong>
-                <button type="button" className={styles.pdfFileRemove} onClick={handlePDFRemove}>
-                  X
-                </button>
-              </>
-            )}
-          </div>
-        </div>
-
-        <div>
-          <div className={styles.stampUpload}>
-            <input
-              ref={stampInputRef}
-              type="file"
-              accept="image/*"
-              multiple
-              onChange={handleStampChange}
-              style={{ display: 'none' }}
-            />
-            <button type="button" onClick={handleStampUpload} className={styles.button}>
-              도장 업로드
-            </button>
-          </div>
-
-          <div className={styles.stamps}>
-            {stamps.map(({ id, url }, index) => (
-              <button
-                className={
-                  index === selectedStampIndex ? styles.stampButtonActive : styles.stampButton
-                }
-                key={id}
-                onClick={() => setSelectedStampIndex(index)}
-              >
-                <img src={url} alt="" className={styles.stampImage} />
-              </button>
-            ))}
-          </div>
-        </div>
+        <PdfUpload
+          originFile={originFile}
+          setOriginFile={setOriginFile}
+          handlePDFRemove={handlePDFRemove}
+        />
+        <StampUpload
+          stamps={stamps}
+          selectedStampIndex={selectedStampIndex}
+          setSelectedStampIndex={setSelectedStampIndex}
+          handleStampChange={handleStampChange}
+        />
       </div>
 
       <div className={styles.bottom}>
-        {originFile && (
-          <button
-            type="button"
-            disabled={!stamps.length}
-            onClick={() => handleStampDraw(originFile)}
-            className={styles.button}
-          >
-            도장 찍기
-          </button>
-        )}
+        <StampDraw originFile={originFile} stamps={stamps} handleStampDraw={handleStampDraw} />
       </div>
     </div>
   );
