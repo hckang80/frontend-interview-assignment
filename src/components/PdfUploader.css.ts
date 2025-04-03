@@ -19,6 +19,7 @@ export const stampUpload = style({
 
 export const stamps = style({
   display: 'flex',
+  flexWrap: 'wrap',
   gap: '8px',
   minHeight: '54px'
 });
