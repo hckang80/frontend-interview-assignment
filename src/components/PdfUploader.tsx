@@ -6,7 +6,7 @@ import { PDFDocument, type PDFPage } from 'pdf-lib';
 import { convertToPng } from '@/utils';
 
 const A = () => {
-  const { originFile: file, setOriginFile: setFile, setSignedFile } = useStore();
+  const { originFile, setOriginFile, setSignedFile } = useStore();
 
   const stampInputRef = useRef<HTMLInputElement>(null);
   const pdfInputRef = useRef<HTMLInputElement>(null);
@@ -16,7 +16,7 @@ const A = () => {
   const handlePDFChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
 
-    setFile(file!);
+    setOriginFile(file!);
 
     e.target.value = '';
   };
@@ -45,7 +45,7 @@ const A = () => {
   };
 
   const handlePDFRemove = () => {
-    setFile(null);
+    setOriginFile(null);
     setSignedFile(null);
   };
 
@@ -112,9 +112,9 @@ const A = () => {
           </div>
 
           <div className="pdfFile">
-            {!!file?.name && (
+            {!!originFile?.name && (
               <>
-                📄 파일명: <strong>{file?.name}</strong>
+                📄 파일명: <strong>{originFile?.name}</strong>
                 <button type="button" className="pdfFileRemove" onClick={handlePDFRemove}>
                   X
                 </button>
@@ -153,8 +153,8 @@ const A = () => {
       </div>
 
       <div className="bottom">
-        {file && (
-          <button type="button" onClick={() => handleStampDraw(file)}>
+        {originFile && (
+          <button type="button" onClick={() => handleStampDraw(originFile)}>
             도장 찍기
           </button>
         )}
