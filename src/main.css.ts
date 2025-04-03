@@ -41,6 +41,13 @@ globalStyle('#root', {
 
 globalStyle('button', {
   background: 'none',
-  border: 0,
+  border: 0
+});
+
+globalStyle('button:not(:disabled)', {
   cursor: 'pointer'
+});
+
+globalStyle('button:disabled', {
+  cursor: 'not-allowed'
 });
