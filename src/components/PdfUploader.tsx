@@ -3,6 +3,7 @@ import { useStore } from '@/store/index';
 
 import './PdfUploader.css';
 import Stamp1 from '../files/stamp-1.jpg';
+import { PDFDocument, rgb, degrees, type PDFPage } from 'pdf-lib';
 
 const A = () => {
   const { file, setFile } = useStore();
@@ -30,7 +31,31 @@ const A = () => {
     setFile(null);
   };
 
-  const handleStampDraw = async () => {};
+  const handleStampDraw = async (file: File) => {
+    const fileArrayBuffer = await file.arrayBuffer();
+    const pdfDoc = await PDFDocument.load(fileArrayBuffer);
+    const pages = pdfDoc.getPages();
+
+    drawStamp(pages);
+
+    const pdfBytes = await pdfDoc.save();
+    const pdfBlob = new Blob([pdfBytes], { type: 'application/pdf' });
+    const updatedFile = new File([pdfBlob], `signed_${file.name}`, { type: 'application/pdf' });
+
+    setFile(updatedFile);
+  };
+
+  const drawStamp = (pages: PDFPage[]) => {
+    pages.forEach((page, index) => {
+      page.drawText(`Page ${index + 1}: Added text by JavaScript`, {
+        x: 50,
+        y: 500,
+        size: 24,
+        color: rgb(0.1, 0.1, 0.95),
+        rotate: degrees(0)
+      });
+    });
+  };
 
   return (
     <div className="A">
@@ -83,9 +108,11 @@ const A = () => {
       </div>
 
       <div className="bottom">
-        <button type="button" onClick={handleStampDraw}>
-          도장 찍기
-        </button>
+        {file && (
+          <button type="button" onClick={() => handleStampDraw(file)}>
+            도장 찍기
+          </button>
+        )}
       </div>
     </div>
   );
