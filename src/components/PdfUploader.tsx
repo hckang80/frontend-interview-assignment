@@ -14,9 +14,12 @@ const A = () => {
   const [selectedStampIndex, setSelectedStampIndex] = useState(0);
 
   const handlePDFChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
+    const { files } = e.target;
+    if (!files) return;
 
-    setOriginFile(file!);
+    const [file] = files;
+
+    setOriginFile(file);
 
     e.target.value = '';
   };
