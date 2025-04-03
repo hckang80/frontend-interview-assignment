@@ -22,13 +22,15 @@ const PdfPreview = () => {
 
   return (
     <div className={styles.container}>
-      {file && fileImage && (
+      {file && fileImage ? (
         <>
           <img src={fileImage} alt="" className={styles.image} />
           <button type="button" onClick={() => downloadPdf(file)} className={styles.button}>
             PDF 다운로드
           </button>
         </>
+      ) : (
+        <p>PDF를 업로드 해보세요.</p>
       )}
     </div>
   );
