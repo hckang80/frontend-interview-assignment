@@ -1,6 +1,9 @@
 import { globalStyle } from '@vanilla-extract/css';
 
 globalStyle(':root', {
+  vars: {
+    '--primary': '#5e5e5e'
+  },
   fontFamily: 'system-ui, Avenir, Helvetica, Arial, sans-serif',
   lineHeight: 1.5,
   fontWeight: 400,

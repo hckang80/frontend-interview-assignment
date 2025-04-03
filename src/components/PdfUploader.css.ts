@@ -34,7 +34,7 @@ export const stampButton = style({
 export const stampButtonActive = style([
   stampButton,
   {
-    outline: '2px solid #5e5e5e'
+    outline: '2px solid var(--primary)'
   }
 ]);
 
@@ -60,12 +60,12 @@ export const bottom = style({
 export const button = style({
   padding: '8px 12px',
   borderRadius: '12px',
-  backgroundColor: '#5e5e5e'
+  backgroundColor: 'var(--primary)'
 });
 
 export const pdfFileRemove = style({
   padding: '4px 8px',
   backgroundColor: 'transparent',
-  color: '#5e5e5e',
+  color: 'var(--primary)',
   fontSize: '16px'
 });

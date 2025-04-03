@@ -19,5 +19,5 @@ export const button = style({
   top: '12px',
   padding: '8px 12px',
   borderRadius: '12px',
-  backgroundColor: '#5e5e5e'
+  backgroundColor: 'var(--primary)'
 });
