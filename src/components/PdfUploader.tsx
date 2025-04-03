@@ -75,8 +75,8 @@ const PdfUploader = () => {
       try {
         const response = await fetch(stamp);
         const imageData = await response.arrayBuffer();
-
         const embeddedImage = await pdfDoc.embedPng(imageData);
+
         const { width: pageWidth, height: pageHeight } = page.getSize();
 
         const scaledWidth = pageWidth * 0.3;
