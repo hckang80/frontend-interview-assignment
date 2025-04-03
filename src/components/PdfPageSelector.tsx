@@ -5,7 +5,8 @@ import './PdfPageSelector.css';
 import { getImageByPdf, loadPdf } from '../utils';
 
 const C = () => {
-  const { file, setSelectedPageIndex } = useStore();
+  const { printedFile, setSelectedPageIndex } = useStore();
+  const file = printedFile();
   const [fileImages, setFileImages] = useState<string[]>([]);
 
   useEffect(() => {

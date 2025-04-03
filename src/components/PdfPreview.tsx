@@ -10,7 +10,8 @@ const FABRIC_CANVAS_WIDTH = 500;
 const FABRIC_CANVAS_HEIGHT = parseFloat((FABRIC_CANVAS_WIDTH * Math.sqrt(2)).toFixed(2));
 
 const B = () => {
-  const { file, selectedPageIndex } = useStore();
+  const { printedFile, selectedPageIndex } = useStore();
+  const file = printedFile();
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const fabricCanvasRef = useRef<fabric.Canvas | null>(null);

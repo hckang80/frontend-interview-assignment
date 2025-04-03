@@ -6,7 +6,7 @@ import { PDFDocument, type PDFPage } from 'pdf-lib';
 import { convertToPng } from '@/utils';
 
 const A = () => {
-  const { file, setFile } = useStore();
+  const { originFile: file, setOriginFile: setFile } = useStore();
 
   const stampInputRef = useRef<HTMLInputElement>(null);
   const pdfInputRef = useRef<HTMLInputElement>(null);

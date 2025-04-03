@@ -1,15 +1,24 @@
 import { create } from 'zustand';
 
 type Store = {
-  file: File | null;
-  setFile: (file: File | null) => void;
+  originFile: File | null;
+  setOriginFile: (file: File | null) => void;
+  signedFile: File | null;
+  setSignedFile: (file: File | null) => void;
   selectedPageIndex: number;
   setSelectedPageIndex: (index: number) => void;
+  printedFile: () => File | null;
 };
 
-export const useStore = create<Store>((set) => ({
-  file: null,
-  setFile: (file: File | null) => set({ file }),
+export const useStore = create<Store>((set, get) => ({
+  originFile: null,
+  setOriginFile: (file: File | null) => set({ originFile: file }),
+  signedFile: null,
+  setSignedFile: (file: File | null) => set({ signedFile: file }),
   selectedPageIndex: 1,
-  setSelectedPageIndex: (index: number) => set({ selectedPageIndex: index })
+  setSelectedPageIndex: (index: number) => set({ selectedPageIndex: index }),
+  printedFile: () => {
+    const { signedFile, originFile } = get();
+    return signedFile || originFile;
+  }
 }));
