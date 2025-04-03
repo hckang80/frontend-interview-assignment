@@ -32,7 +32,7 @@ export const getImageByPdf = async (
 ): Promise<string> => {
   try {
     const page = await pdf.getPage(pageNumber);
-    const viewport = page.getViewport({ scale: 3 });
+    const viewport = page.getViewport({ scale: 2 });
 
     const canvas = document.createElement('canvas');
     const context = canvas.getContext('2d');
@@ -51,14 +51,17 @@ export const getImageByPdf = async (
 
 export const downloadPdf = async (file: File) => {
   try {
-    const pdfDoc = await PDFDocument.create();
+    console.time('downloadPdf');
 
+    const pdfDoc = await PDFDocument.create();
     const { pdf, totalPages } = await loadPdf(file);
 
     for (let pageNumber = 1; pageNumber <= totalPages; pageNumber++) {
-      const image = await getImageByPdf(pdf, pageNumber);
-      const imageBytes = await fetch(image).then((res) => res.arrayBuffer());
-      const pdfImage = await pdfDoc.embedPng(imageBytes);
+      const [pdfImage] = await Promise.all([
+        pdfDoc.embedPng(
+          await fetch(await getImageByPdf(pdf, pageNumber)).then((res) => res.arrayBuffer())
+        )
+      ]);
 
       const { width, height } = pdfImage.scale(1);
       const page = pdfDoc.addPage([width, height]);
@@ -71,7 +74,10 @@ export const downloadPdf = async (file: File) => {
       });
     }
 
+    console.time('pdfBytes');
     const pdfBytes = await pdfDoc.save();
+    console.timeEnd('pdfBytes');
+    console.timeEnd('downloadPdf');
 
     const blob = new Blob([pdfBytes], { type: 'application/pdf' });
     const link = document.createElement('a');
