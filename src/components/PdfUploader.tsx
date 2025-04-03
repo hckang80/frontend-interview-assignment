@@ -20,6 +20,7 @@ const PdfUploader = () => {
     const [file] = files;
 
     setOriginFile(file);
+    setSignedFile(null);
 
     e.target.value = '';
   };
