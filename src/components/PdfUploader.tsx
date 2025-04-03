@@ -10,6 +10,7 @@ const A = () => {
   const stampInputRef = useRef<HTMLInputElement>(null);
   const pdfInputRef = useRef<HTMLInputElement>(null);
   const [stamps, setStamps] = useState<string[]>([]);
+  const [selectedStampIndex, setSelectedStampIndex] = useState(0);
 
   const handlePDFChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -119,7 +120,13 @@ const A = () => {
 
           <div className="stamps">
             {stamps.map((stamp, index) => (
-              <img key={index} src={stamp} alt="" />
+              <button
+                className={index === selectedStampIndex ? 'active' : ''}
+                key={index}
+                onClick={() => setSelectedStampIndex(index)}
+              >
+                <img src={stamp} alt="" />
+              </button>
             ))}
           </div>
         </div>
