@@ -69,17 +69,12 @@ const A = () => {
   };
 
   const drawStamp = async (pdfDoc: PDFDocument, pages: PDFPage[]) => {
-    console.time('for');
     for (const page of pages) {
       const stamp = stamps[selectedStampIndex];
 
       try {
-        console.time('response');
         const response = await fetch(stamp);
-        console.timeEnd('response');
-        console.time('imageData');
         const imageData = await response.arrayBuffer();
-        console.timeEnd('imageData');
 
         const embeddedImage = await pdfDoc.embedPng(imageData);
         const { width: pageWidth, height: pageHeight } = page.getSize();
@@ -100,7 +95,6 @@ const A = () => {
         console.error('Failed to process stamp:', stamp, error);
       }
     }
-    console.timeEnd('for');
   };
 
   return (
