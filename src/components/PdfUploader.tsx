@@ -106,7 +106,7 @@ const PdfUploader = () => {
             <input
               ref={pdfInputRef}
               type="file"
-              accept=".pdf, .png"
+              accept=".pdf"
               onChange={handlePDFChange}
               style={{ display: 'none' }}
             />
