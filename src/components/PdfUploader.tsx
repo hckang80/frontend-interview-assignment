@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 import { useStore } from '@/store/index';
 
 import './PdfUploader.css';
-import { PDFDocument, rgb, degrees, type PDFPage } from 'pdf-lib';
+import { PDFDocument, type PDFPage } from 'pdf-lib';
 
 const A = () => {
   const { file, setFile } = useStore();
@@ -52,7 +52,7 @@ const A = () => {
     const pdfDoc = await PDFDocument.load(fileArrayBuffer);
     const pages = pdfDoc.getPages();
 
-    drawStamp(pages);
+    await drawStamp(pdfDoc, pages);
 
     const pdfBytes = await pdfDoc.save();
     const pdfBlob = new Blob([pdfBytes], { type: 'application/pdf' });
@@ -61,16 +61,32 @@ const A = () => {
     setFile(updatedFile);
   };
 
-  const drawStamp = (pages: PDFPage[]) => {
-    pages.forEach((page, index) => {
-      page.drawText(`Page ${index + 1}: Added text by JavaScript`, {
-        x: 50,
-        y: 500,
-        size: 24,
-        color: rgb(0.1, 0.1, 0.95),
-        rotate: degrees(0)
-      });
-    });
+  const drawStamp = async (pdfDoc: PDFDocument, pages: PDFPage[]) => {
+    for (const page of pages) {
+      const stamp = stamps[selectedStampIndex];
+
+      try {
+        const response = await fetch(stamp);
+        const imageData = await response.arrayBuffer();
+
+        const embeddedImage = await pdfDoc.embedJpg(imageData);
+        const { width: imageWidth, height: imageHeight } = embeddedImage.scale(1);
+        const { width: pageWidth, height: pageHeight } = page.getSize();
+        const scaledWidth = 100;
+        const scaledHeight = (imageHeight / imageWidth) * scaledWidth;
+        const x = (pageWidth - scaledWidth) / 2;
+        const y = (pageHeight - scaledHeight) / 2;
+
+        page.drawImage(embeddedImage, {
+          x,
+          y,
+          width: scaledWidth,
+          height: scaledHeight
+        });
+      } catch (error) {
+        console.error('Failed to process stamp:', stamp, error);
+      }
+    }
   };
 
   return (
