@@ -51,8 +51,6 @@ export const getImageByPdf = async (
 
 export const downloadPdf = async (file: File) => {
   try {
-    console.time('downloadPdf');
-
     const pdfDoc = await PDFDocument.create();
     const { pdf, totalPages } = await loadPdf(file);
 
@@ -74,10 +72,7 @@ export const downloadPdf = async (file: File) => {
       });
     }
 
-    console.time('pdfBytes');
     const pdfBytes = await pdfDoc.save();
-    console.timeEnd('pdfBytes');
-    console.timeEnd('downloadPdf');
 
     const blob = new Blob([pdfBytes], { type: 'application/pdf' });
     const link = document.createElement('a');
