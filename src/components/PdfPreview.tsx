@@ -9,7 +9,7 @@ import * as styles from './PdfPreview.css.ts';
 const FABRIC_CANVAS_WIDTH = 500;
 const FABRIC_CANVAS_HEIGHT = parseFloat((FABRIC_CANVAS_WIDTH * Math.sqrt(2)).toFixed(2));
 
-const B = () => {
+const PdfPreview = () => {
   const { printedFile, selectedPageIndex } = useStore();
   const file = printedFile();
 
@@ -68,4 +68,4 @@ const B = () => {
   );
 };
 
-export default B;
+export default PdfPreview;

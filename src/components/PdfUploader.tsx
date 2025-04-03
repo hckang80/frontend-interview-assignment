@@ -5,7 +5,7 @@ import * as styles from './PdfUploader.css';
 import { PDFDocument, type PDFPage } from 'pdf-lib';
 import { singleton, optimizeImage } from '@/utils';
 
-const A = () => {
+const PdfUploader = () => {
   const { originFile, setOriginFile, setSignedFile } = useStore();
 
   const stampInputRef = useRef<HTMLInputElement>(null);
@@ -171,4 +171,4 @@ const A = () => {
   );
 };
 
-export default A;
+export default PdfUploader;

@@ -4,7 +4,7 @@ import { useStore } from '@/store/index';
 import * as styles from './PdfPages.css.ts';
 import { getImageByPdf, loadPdf } from '../utils/index.ts';
 
-const C = () => {
+const PdfPages = () => {
   const { printedFile, setSelectedPageIndex } = useStore();
   const file = printedFile();
   const [fileImages, setFileImages] = useState<string[]>([]);
@@ -41,4 +41,4 @@ const C = () => {
   );
 };
 
-export default C;
+export default PdfPages;
