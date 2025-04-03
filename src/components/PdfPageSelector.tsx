@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { useStore } from '@/store';
+import { useStore } from '@/store/index';
 
-import './C.css';
-import { getImageByPdf, loadPdf } from './utils';
+import './PdfPageSelector.css';
+import { getImageByPdf, loadPdf } from '../utils';
 
 const C = () => {
   const { file, setSelectedPageIndex } = useStore();

@@ -1,6 +1,6 @@
-import A from './A';
-import B from './B';
-import C from './C';
+import PdfUploader from './components/PdfUploader';
+import PdfPreview from './components/PdfPreview';
+import PdfPageSelector from './components/PdfPageSelector';
 
 import './App.css';
 
@@ -8,9 +8,9 @@ function App() {
   return (
     <div id="app">
       <div>
-        <A />
-        <B />
-        <C />
+        <PdfUploader />
+        <PdfPreview />
+        <PdfPageSelector />
       </div>
     </div>
   );

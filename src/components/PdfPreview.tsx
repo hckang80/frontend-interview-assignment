@@ -1,10 +1,10 @@
 import { useEffect, useRef } from 'react';
-import { useStore } from '@/store';
+import { useStore } from '@/store/index';
 
 import * as fabric from 'fabric';
 
-import { loadPdf, getImageByPdf, downloadPdf } from './utils';
-import './B.css';
+import { loadPdf, getImageByPdf, downloadPdf } from '../utils';
+import './PdfPreview.css';
 
 const FABRIC_CANVAS_WIDTH = 500;
 const FABRIC_CANVAS_HEIGHT = parseFloat((FABRIC_CANVAS_WIDTH * Math.sqrt(2)).toFixed(2));

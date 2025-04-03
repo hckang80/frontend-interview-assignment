@@ -1,8 +1,8 @@
 import { useRef } from 'react';
-import { useStore } from '@/store';
+import { useStore } from '@/store/index';
 
-import './A.css';
-import Stamp1 from './files/stamp-1.jpg';
+import './PdfUploader.css';
+import Stamp1 from '../files/stamp-1.jpg';
 
 const A = () => {
   const { file, setFile } = useStore();
