@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import React, { useRef, useState, useCallback } from 'react';
 import { useStore } from '@/store/index';
 
 import * as styles from './PdfUploader.css';
@@ -18,66 +18,78 @@ const PdfUploader = () => {
   const [stamps, setStamps] = useState<StampType[]>([]);
   const [selectedStampIndex, setSelectedStampIndex] = useState(0);
 
-  const handlePDFChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { files } = e.target;
-    if (!files) return;
-
-    const [file] = files;
-
-    handlePDFRemove();
-    setOriginFile(file);
-
-    e.target.value = '';
-  };
-
-  const handleStampUpload = () => {
-    stampInputRef.current?.click();
-  };
-
-  const handleStampChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { files } = e.target;
-    if (!files || files.length === 0) return;
-
-    const newStamps = await Promise.all(
-      Array.from(files).map(async (file) => ({
-        id: crypto.randomUUID(),
-        url: await singleton(optimizeImage)(file)
-      }))
-    );
-
-    setStamps((prevStamps) => {
-      prevStamps.forEach((stamp) => URL.revokeObjectURL(stamp.url));
-      const updatedStamps = [...prevStamps, ...newStamps];
-      return updatedStamps.slice(-5);
-    });
-
-    e.target.value = '';
-  };
-
-  const handlePDFUpload = () => {
-    pdfInputRef.current?.click();
-  };
-
   const handlePDFRemove = () => {
     resetFile();
     setSelectedStampIndex(0);
   };
 
-  const handleStampDraw = async (file: File) => {
-    setSignedFile(await getUpdatedFile(file));
+  const handlePDFChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const { files } = e.target;
+      if (!files) return;
+
+      const [file] = files;
+
+      handlePDFRemove();
+      setOriginFile(file);
+
+      e.target.value = '';
+    },
+    [setOriginFile, handlePDFRemove]
+  );
+
+  const handleStampUpload = () => {
+    stampInputRef.current?.click();
   };
 
-  const getUpdatedFile = async (file: File) => {
-    const fileArrayBuffer = await file.arrayBuffer();
-    const pdfDoc = await PDFDocument.load(fileArrayBuffer);
-    const pages = pdfDoc.getPages();
+  const handleStampChange = useCallback(
+    async (e: React.ChangeEvent<HTMLInputElement>) => {
+      const { files } = e.target;
+      if (!files || files.length === 0) return;
 
-    await drawStamp(pdfDoc, pages);
+      const newStamps = await Promise.all(
+        Array.from(files).map(async (file) => ({
+          id: crypto.randomUUID(),
+          url: await singleton(optimizeImage)(file)
+        }))
+      );
 
-    const pdfBytes = await pdfDoc.save();
-    const pdfBlob = new Blob([pdfBytes], { type: 'application/pdf' });
-    return new File([pdfBlob], file.name, { type: 'application/pdf' });
+      setStamps((prevStamps) => {
+        prevStamps.forEach((stamp) => URL.revokeObjectURL(stamp.url));
+        const updatedStamps = [...prevStamps, ...newStamps];
+        return updatedStamps.slice(-5);
+      });
+
+      e.target.value = '';
+    },
+    [setStamps]
+  );
+
+  const handlePDFUpload = () => {
+    pdfInputRef.current?.click();
   };
+
+  const getUpdatedFile = useCallback(
+    async (file: File) => {
+      const fileArrayBuffer = await file.arrayBuffer();
+      const pdfDoc = await PDFDocument.load(fileArrayBuffer);
+      const pages = pdfDoc.getPages();
+
+      await drawStamp(pdfDoc, pages);
+
+      const pdfBytes = await pdfDoc.save();
+      const pdfBlob = new Blob([pdfBytes], { type: 'application/pdf' });
+      return new File([pdfBlob], file.name, { type: 'application/pdf' });
+    },
+    [stamps, selectedStampIndex]
+  );
+
+  const handleStampDraw = useCallback(
+    async (file: File) => {
+      setSignedFile(await getUpdatedFile(file));
+    },
+    [setSignedFile, getUpdatedFile]
+  );
 
   const drawStamp = async (pdfDoc: PDFDocument, pages: PDFPage[]) => {
     for (const page of pages) {
