@@ -113,3 +113,42 @@ export const convertToPng = async (imageUrl: string): Promise<string> => {
     };
   });
 };
+
+export const resizeImage = (file: File, maxWidth = 200, maxHeight = 200): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.src = URL.createObjectURL(file);
+
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+
+      let { width, height } = img;
+
+      if (width > maxWidth || height > maxHeight) {
+        if (width / height > maxWidth / maxHeight) {
+          height = (height * maxWidth) / width;
+          width = maxWidth;
+        } else {
+          width = (width * maxHeight) / height;
+          height = maxHeight;
+        }
+      }
+
+      canvas.width = width;
+      canvas.height = height;
+
+      if (ctx) {
+        ctx.drawImage(img, 0, 0, width, height);
+        resolve(canvas.toDataURL('image/png'));
+      } else {
+        reject(new Error('Canvas context not available'));
+      }
+    };
+
+    img.onerror = (error) => {
+      reject(error);
+    };
+  });
+};

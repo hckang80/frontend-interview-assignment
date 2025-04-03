@@ -3,7 +3,7 @@ import { useStore } from '@/store/index';
 
 import './PdfUploader.css';
 import { PDFDocument, type PDFPage } from 'pdf-lib';
-import { convertToPng } from '@/utils';
+import { convertToPng, resizeImage } from '@/utils';
 
 const A = () => {
   const { originFile, setOriginFile, setSignedFile } = useStore();
@@ -28,11 +28,11 @@ const A = () => {
     stampInputRef.current?.click();
   };
 
-  const handleStampChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleStampChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const { files } = e.target;
     if (!files || files.length === 0) return;
 
-    const newStamps = Array.from(files).map((file) => URL.createObjectURL(file));
+    const newStamps = await Promise.all(Array.from(files).map((file) => resizeImage(file)));
 
     setStamps((prevStamps) => {
       prevStamps.forEach((stamp) => URL.revokeObjectURL(stamp));
@@ -67,13 +67,20 @@ const A = () => {
   };
 
   const drawStamp = async (pdfDoc: PDFDocument, pages: PDFPage[]) => {
+    console.time('for');
     for (const page of pages) {
       const stamp = stamps[selectedStampIndex];
 
       try {
+        console.time('pngDataUrl');
         const pngDataUrl = await convertToPng(stamp);
+        console.timeEnd('pngDataUrl');
+        console.time('response');
         const response = await fetch(pngDataUrl);
+        console.timeEnd('response');
+        console.time('imageData');
         const imageData = await response.arrayBuffer();
+        console.timeEnd('imageData');
 
         const embeddedImage = await pdfDoc.embedPng(imageData);
         const { width: pageWidth, height: pageHeight } = page.getSize();
@@ -94,6 +101,7 @@ const A = () => {
         console.error('Failed to process stamp:', stamp, error);
       }
     }
+    console.timeEnd('for');
   };
 
   return (
