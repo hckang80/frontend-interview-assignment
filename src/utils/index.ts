@@ -87,33 +87,6 @@ export const downloadPdf = async (file: File) => {
   }
 };
 
-export const convertToPng = async (imageUrl: string): Promise<string> => {
-  return new Promise((resolve, reject) => {
-    const img = new Image();
-    img.crossOrigin = 'anonymous';
-    img.src = imageUrl;
-
-    img.onload = () => {
-      const canvas = document.createElement('canvas');
-      canvas.width = img.width;
-      canvas.height = img.height;
-
-      const ctx = canvas.getContext('2d');
-      if (!ctx) {
-        reject(new Error('Canvas context not available'));
-        return;
-      }
-
-      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-      resolve(canvas.toDataURL('image/png'));
-    };
-
-    img.onerror = (error) => {
-      reject(error);
-    };
-  });
-};
-
 export const resizeImage = (file: File, maxWidth = 200, maxHeight = 200): Promise<string> => {
   return new Promise((resolve, reject) => {
     const img = new Image();

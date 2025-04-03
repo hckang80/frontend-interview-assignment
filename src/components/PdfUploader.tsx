@@ -3,7 +3,7 @@ import { useStore } from '@/store/index';
 
 import './PdfUploader.css';
 import { PDFDocument, type PDFPage } from 'pdf-lib';
-import { convertToPng, resizeImage } from '@/utils';
+import { resizeImage } from '@/utils';
 
 const A = () => {
   const { originFile, setOriginFile, setSignedFile } = useStore();
@@ -72,11 +72,8 @@ const A = () => {
       const stamp = stamps[selectedStampIndex];
 
       try {
-        console.time('pngDataUrl');
-        const pngDataUrl = await convertToPng(stamp);
-        console.timeEnd('pngDataUrl');
         console.time('response');
-        const response = await fetch(pngDataUrl);
+        const response = await fetch(stamp);
         console.timeEnd('response');
         console.time('imageData');
         const imageData = await response.arrayBuffer();
