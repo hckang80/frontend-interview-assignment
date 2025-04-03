@@ -6,7 +6,7 @@ import { PDFDocument, type PDFPage } from 'pdf-lib';
 import { convertToPng } from '@/utils';
 
 const A = () => {
-  const { originFile: file, setOriginFile: setFile } = useStore();
+  const { originFile: file, setOriginFile: setFile, setSignedFile } = useStore();
 
   const stampInputRef = useRef<HTMLInputElement>(null);
   const pdfInputRef = useRef<HTMLInputElement>(null);
@@ -46,6 +46,7 @@ const A = () => {
 
   const handlePDFRemove = () => {
     setFile(null);
+    setSignedFile(null);
   };
 
   const handleStampDraw = async (file: File) => {
@@ -59,7 +60,7 @@ const A = () => {
     const pdfBlob = new Blob([pdfBytes], { type: 'application/pdf' });
     const updatedFile = new File([pdfBlob], file.name, { type: 'application/pdf' });
 
-    setFile(updatedFile);
+    setSignedFile(updatedFile);
   };
 
   const drawStamp = async (pdfDoc: PDFDocument, pages: PDFPage[]) => {
