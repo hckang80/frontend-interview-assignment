@@ -26,14 +26,15 @@ const C = () => {
   return (
     <div className="C">
       <div className="top">
-        {fileImages.map((image, index) => (
-          <div key={index} onClick={() => setSelectedPageIndex(index + 1)}>
-            <div className="image">
-              <img src={image} alt="" />
+        {file &&
+          fileImages.map((image, index) => (
+            <div key={index} onClick={() => setSelectedPageIndex(index + 1)}>
+              <div className="image">
+                <img src={image} alt="" />
+              </div>
+              <div className="imageIndex">{index + 1}</div>
             </div>
-            <div className="imageIndex">{index + 1}</div>
-          </div>
-        ))}
+          ))}
       </div>
     </div>
   );
