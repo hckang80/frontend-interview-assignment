@@ -20,16 +20,21 @@ export const top = style({
   padding: '12px'
 });
 
-export const image = style({
-  cursor: 'pointer',
+export const button = style({
   display: 'flex',
   flex: '0 0 auto',
   flexDirection: 'column',
   overflow: 'hidden',
   width: '160px',
-  borderRadius: '12px',
-  backgroundColor: 'aliceblue'
+  borderRadius: '12px'
 });
+
+export const buttonActive = style([
+  button,
+  {
+    outline: '2px solid var(--primary)'
+  }
+]);
 
 export const imageContent = style({
   width: '100%',
@@ -42,3 +47,11 @@ export const imageIndex = style({
   padding: '4px 0',
   fontSize: '12px'
 });
+
+export const imageIndexActive = style([
+  imageIndex,
+  {
+    fontWeight: 'bold',
+    color: 'var(--primary)'
+  }
+]);
