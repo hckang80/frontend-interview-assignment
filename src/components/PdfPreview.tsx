@@ -5,7 +5,7 @@ import { loadPdf, getImageByPdf, downloadPdf } from '../utils';
 import * as styles from './PdfPreview.css.ts';
 
 const PdfPreview = () => {
-  const { printedFile, selectedPageIndex } = useStore();
+  const { printedFile, signedFile, selectedPageIndex } = useStore();
   const file = printedFile();
   const [fileImage, setFileImage] = useState('');
 
@@ -25,7 +25,12 @@ const PdfPreview = () => {
       {file && fileImage ? (
         <>
           <img src={fileImage} alt="" className={styles.image} />
-          <button type="button" onClick={() => downloadPdf(file)} className={styles.button}>
+          <button
+            disabled={!signedFile}
+            type="button"
+            onClick={() => downloadPdf(file)}
+            className={styles.button}
+          >
             PDF 다운로드
           </button>
         </>
