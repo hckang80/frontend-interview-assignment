@@ -81,7 +81,7 @@ const PdfUploader = () => {
 
   const drawStamp = async (pdfDoc: PDFDocument, pages: PDFPage[]) => {
     for (const page of pages) {
-      const stamp = stamps[selectedStampIndex - 1];
+      const stamp = stamps[selectedStampIndex];
 
       try {
         const response = await fetch(stamp.url);
@@ -157,10 +157,10 @@ const PdfUploader = () => {
             {stamps.map(({ id, url }, index) => (
               <button
                 className={
-                  index + 1 === selectedStampIndex ? styles.stampButtonActive : styles.stampButton
+                  index === selectedStampIndex ? styles.stampButtonActive : styles.stampButton
                 }
                 key={id}
-                onClick={() => setSelectedStampIndex(index + 1)}
+                onClick={() => setSelectedStampIndex(index)}
               >
                 <img src={url} alt="" className={styles.stampImage} />
               </button>
@@ -172,7 +172,6 @@ const PdfUploader = () => {
       <div className={styles.bottom}>
         {originFile && (
           <button
-            disabled={!selectedStampIndex}
             type="button"
             onClick={() => handleStampDraw(originFile)}
             className={styles.button}
