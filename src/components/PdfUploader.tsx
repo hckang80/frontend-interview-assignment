@@ -11,7 +11,7 @@ type StampType = {
 };
 
 const PdfUploader = () => {
-  const { originFile, setOriginFile, setSignedPreviewFile, setSignedFile, resetFile } = useStore();
+  const { originFile, setOriginFile, setSignedFile, resetFile } = useStore();
 
   const stampInputRef = useRef<HTMLInputElement>(null);
   const pdfInputRef = useRef<HTMLInputElement>(null);
@@ -66,7 +66,7 @@ const PdfUploader = () => {
   const handleStampClick = async (index: number, file: File | null) => {
     if (!file) return;
     setSelectedStampIndex(index);
-    setSignedPreviewFile(await getUpdatedFile(file, index));
+    setSignedFile(await getUpdatedFile(file, index));
   };
 
   const handleStampDraw = async (file: File, stampIndex: number) => {

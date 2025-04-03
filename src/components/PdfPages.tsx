@@ -10,8 +10,7 @@ type FileImage = {
 };
 
 const PdfPages = () => {
-  const { printedFile, selectedPageIndex, setSelectedPageIndex } = useStore();
-  const file = printedFile();
+  const { originFile: file, selectedPageIndex, setSelectedPageIndex } = useStore();
   const [fileImages, setFileImages] = useState<FileImage[]>([]);
 
   const isActive = (index: number) => selectedPageIndex === index;
