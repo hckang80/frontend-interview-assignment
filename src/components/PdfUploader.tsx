@@ -24,7 +24,7 @@ const PdfUploader = () => {
 
     const [file] = files;
 
-    resetFile();
+    handlePDFRemove();
     setOriginFile(file);
 
     e.target.value = '';
@@ -60,6 +60,7 @@ const PdfUploader = () => {
 
   const handlePDFRemove = () => {
     resetFile();
+    setSelectedStampIndex(0);
   };
 
   const handleStampClick = async (index: number, file: File | null) => {
