@@ -1,6 +1,6 @@
 import PdfUploader from './components/PdfUploader';
 import PdfPreview from './components/PdfPreview';
-import PdfPageSelector from './components/PdfPageSelector';
+import PdfPages from './components/PdfPages.tsx';
 
 import './app.css.ts';
 
@@ -10,7 +10,7 @@ function App() {
       <div>
         <PdfUploader />
         <PdfPreview />
-        <PdfPageSelector />
+        <PdfPages />
       </div>
     </div>
   );

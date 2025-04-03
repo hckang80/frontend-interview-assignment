@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useStore } from '@/store/index';
 
-import * as styles from './PdfPageSelector.css.ts';
-import { getImageByPdf, loadPdf } from '../utils';
+import * as styles from './PdfPages.css.ts';
+import { getImageByPdf, loadPdf } from '../utils/index.ts';
 
 const C = () => {
   const { printedFile, setSelectedPageIndex } = useStore();
