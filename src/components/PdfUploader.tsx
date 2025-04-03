@@ -173,6 +173,7 @@ const PdfUploader = () => {
         {originFile && (
           <button
             type="button"
+            disabled={!stamps.length}
             onClick={() => handleStampDraw(originFile)}
             className={styles.button}
           >
