@@ -12,7 +12,7 @@ const PdfPages = () => {
   const isActive = (index: number) => selectedPageIndex === index;
 
   useEffect(() => {
-    if (!file) return;
+    if (!file) return setFileImages([]);
 
     (async () => {
       const { totalPages, pdf } = await loadPdf(file);
