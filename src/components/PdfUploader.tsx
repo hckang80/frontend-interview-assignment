@@ -1,8 +1,7 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { useStore } from '@/store/index';
 
 import './PdfUploader.css';
-import Stamp1 from '../files/stamp-1.jpg';
 import { PDFDocument, rgb, degrees, type PDFPage } from 'pdf-lib';
 
 const A = () => {
@@ -10,6 +9,7 @@ const A = () => {
 
   const stampInputRef = useRef<HTMLInputElement>(null);
   const pdfInputRef = useRef<HTMLInputElement>(null);
+  const [stamps, setStamps] = useState<string[]>([]);
 
   const handlePDFChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -21,6 +21,21 @@ const A = () => {
 
   const handleStampUpload = () => {
     stampInputRef.current?.click();
+  };
+
+  const handleStampChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { files } = e.target;
+    if (!files || files.length === 0) return;
+
+    const newStamps = Array.from(files).map((file) => URL.createObjectURL(file));
+
+    setStamps((prevStamps) => {
+      prevStamps.forEach((stamp) => URL.revokeObjectURL(stamp));
+      const updatedStamps = [...prevStamps, ...newStamps];
+      return updatedStamps.slice(0, 5);
+    });
+
+    e.target.value = '';
   };
 
   const handlePDFUpload = () => {
@@ -92,8 +107,9 @@ const A = () => {
             <input
               ref={stampInputRef}
               type="file"
-              accept=".png"
-              onChange={() => {}}
+              accept="image/*"
+              multiple
+              onChange={handleStampChange}
               style={{ display: 'none' }}
             />
             <button type="button" onClick={handleStampUpload}>
@@ -102,7 +118,9 @@ const A = () => {
           </div>
 
           <div className="stamps">
-            <img src={Stamp1} />
+            {stamps.map((stamp, index) => (
+              <img key={index} src={stamp} alt="" />
+            ))}
           </div>
         </div>
       </div>
