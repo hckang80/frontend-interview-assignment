@@ -5,8 +5,8 @@ import { loadPdf, getImageByPdf, downloadPdf } from '../utils';
 import * as styles from './PdfPreview.css.ts';
 
 const PdfPreview = () => {
-  const { printedFile, signedFile, selectedPageIndex } = useStore();
-  const file = printedFile();
+  const { previewFile, signedFile, selectedPageIndex } = useStore();
+  const file = previewFile();
   const [fileImage, setFileImage] = useState('');
 
   useEffect(() => {

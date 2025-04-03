@@ -11,7 +11,7 @@ type StampType = {
 };
 
 const PdfUploader = () => {
-  const { originFile, setOriginFile, setSignedFile, resetFile } = useStore();
+  const { originFile, setOriginFile, setSignedPreviewFile, setSignedFile, resetFile } = useStore();
 
   const stampInputRef = useRef<HTMLInputElement>(null);
   const pdfInputRef = useRef<HTMLInputElement>(null);
@@ -62,23 +62,31 @@ const PdfUploader = () => {
     resetFile();
   };
 
-  const handleStampDraw = async (file: File) => {
+  const handleStampClick = async (index: number, file: File | null) => {
+    if (!file) return;
+    setSelectedStampIndex(index);
+    setSignedPreviewFile(await getUpdatedFile(file, index));
+  };
+
+  const handleStampDraw = async (file: File, stampIndex: number) => {
+    setSignedFile(await getUpdatedFile(file, stampIndex));
+  };
+
+  const getUpdatedFile = async (file: File, stampIndex: number) => {
     const fileArrayBuffer = await file.arrayBuffer();
     const pdfDoc = await PDFDocument.load(fileArrayBuffer);
     const pages = pdfDoc.getPages();
 
-    await drawStamp(pdfDoc, pages);
+    await drawStamp(pdfDoc, pages, stampIndex);
 
     const pdfBytes = await pdfDoc.save();
     const pdfBlob = new Blob([pdfBytes], { type: 'application/pdf' });
-    const updatedFile = new File([pdfBlob], file.name, { type: 'application/pdf' });
-
-    setSignedFile(updatedFile);
+    return new File([pdfBlob], file.name, { type: 'application/pdf' });
   };
 
-  const drawStamp = async (pdfDoc: PDFDocument, pages: PDFPage[]) => {
+  const drawStamp = async (pdfDoc: PDFDocument, pages: PDFPage[], stampIndex: number) => {
     for (const page of pages) {
-      const stamp = stamps[selectedStampIndex];
+      const stamp = stamps[stampIndex - 1];
 
       try {
         const response = await fetch(stamp.url);
@@ -154,12 +162,10 @@ const PdfUploader = () => {
             {stamps.map(({ id, url }, index) => (
               <button
                 className={
-                  stamps.length > 1 && index === selectedStampIndex
-                    ? styles.stampButtonActive
-                    : styles.stampButton
+                  index + 1 === selectedStampIndex ? styles.stampButtonActive : styles.stampButton
                 }
                 key={id}
-                onClick={() => setSelectedStampIndex(index)}
+                onClick={() => handleStampClick(index + 1, originFile)}
               >
                 <img src={url} alt="" className={styles.stampImage} />
               </button>
@@ -171,8 +177,9 @@ const PdfUploader = () => {
       <div className={styles.bottom}>
         {originFile && (
           <button
+            disabled={!selectedStampIndex}
             type="button"
-            onClick={() => handleStampDraw(originFile)}
+            onClick={() => handleStampDraw(originFile, selectedStampIndex)}
             className={styles.button}
           >
             도장 찍기
