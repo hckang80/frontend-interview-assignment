@@ -5,16 +5,12 @@ import * as styles from './PdfUploader.css';
 import { PDFDocument, type PDFPage } from 'pdf-lib';
 import { singleton, optimizeImage } from '@/utils';
 import { PdfUpload, StampUpload, StampDraw } from '.';
-
-type StampType = {
-  id: string;
-  url: string;
-};
+import { Stamp } from '@/types';
 
 const PdfUploader = () => {
   const { originFile, setOriginFile, setSignedFile, resetFile } = useStore();
 
-  const [stamps, setStamps] = useState<StampType[]>([]);
+  const [stamps, setStamps] = useState<Stamp[]>([]);
   const [selectedStampIndex, setSelectedStampIndex] = useState(0);
 
   const handlePDFRemove = () => {

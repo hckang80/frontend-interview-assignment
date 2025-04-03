@@ -1,14 +1,10 @@
 import React from 'react';
 import * as styles from './PdfUploader.css';
-
-type StampType = {
-  id: string;
-  url: string;
-};
+import { Stamp } from '@/types';
 
 interface StampDrawProps {
   originFile: File | null;
-  stamps: StampType[];
+  stamps: Stamp[];
   handleStampDraw: (file: File) => Promise<void>;
 }
 

@@ -1,13 +1,9 @@
 import React, { useRef } from 'react';
 import * as styles from './PdfUploader.css';
-
-type StampType = {
-  id: string;
-  url: string;
-};
+import { Stamp } from '@/types';
 
 interface StampUploadProps {
-  stamps: StampType[];
+  stamps: Stamp[];
   selectedStampIndex: number;
   setSelectedStampIndex: (index: number) => void;
   handleStampChange: (e: React.ChangeEvent<HTMLInputElement>) => Promise<void>;
