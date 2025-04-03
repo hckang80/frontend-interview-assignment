@@ -5,12 +5,17 @@ import * as styles from './PdfUploader.css';
 import { PDFDocument, type PDFPage } from 'pdf-lib';
 import { singleton, optimizeImage } from '@/utils';
 
+type StampType = {
+  id: string;
+  url: string;
+};
+
 const PdfUploader = () => {
   const { originFile, setOriginFile, setSignedFile, resetFile } = useStore();
 
   const stampInputRef = useRef<HTMLInputElement>(null);
   const pdfInputRef = useRef<HTMLInputElement>(null);
-  const [stamps, setStamps] = useState<string[]>([]);
+  const [stamps, setStamps] = useState<StampType[]>([]);
   const [selectedStampIndex, setSelectedStampIndex] = useState(0);
 
   const handlePDFChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -34,11 +39,14 @@ const PdfUploader = () => {
     if (!files || files.length === 0) return;
 
     const newStamps = await Promise.all(
-      Array.from(files).map((file) => singleton(optimizeImage)(file))
+      Array.from(files).map(async (file) => ({
+        id: crypto.randomUUID(),
+        url: await singleton(optimizeImage)(file)
+      }))
     );
 
     setStamps((prevStamps) => {
-      prevStamps.forEach((stamp) => URL.revokeObjectURL(stamp));
+      prevStamps.forEach((stamp) => URL.revokeObjectURL(stamp.url));
       const updatedStamps = [...prevStamps, ...newStamps];
       return updatedStamps.slice(-5);
     });
@@ -73,7 +81,7 @@ const PdfUploader = () => {
       const stamp = stamps[selectedStampIndex];
 
       try {
-        const response = await fetch(stamp);
+        const response = await fetch(stamp.url);
         const imageData = await response.arrayBuffer();
         const embeddedImage = await pdfDoc.embedPng(imageData);
 
@@ -143,17 +151,17 @@ const PdfUploader = () => {
           </div>
 
           <div className={styles.stamps}>
-            {stamps.map((stamp, index) => (
+            {stamps.map(({ id, url }, index) => (
               <button
                 className={
                   stamps.length > 1 && index === selectedStampIndex
                     ? styles.stampButtonActive
                     : styles.stampButton
                 }
-                key={index}
+                key={id}
                 onClick={() => setSelectedStampIndex(index)}
               >
-                <img src={stamp} alt="" className={styles.stampImage} />
+                <img src={url} alt="" className={styles.stampImage} />
               </button>
             ))}
           </div>
