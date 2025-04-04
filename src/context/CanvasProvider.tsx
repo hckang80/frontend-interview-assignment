@@ -64,13 +64,23 @@ export const CanvasProvider = ({ children }: { children: ReactNode }) => {
     e.target.value = '';
   }
 
+  function removeSignFromFile() {
+    const { current: canvas } = fabricCanvasRef;
+    if (!canvas) return;
+
+    const objects = canvas.getObjects();
+    const lastObject = objects[objects.length - 1];
+    canvas.remove(lastObject);
+  }
+
   return (
     <CanvasContext.Provider
       value={{
         fabricCanvasRef,
         canvasRef,
         initializeCanvas,
-        uploadStamp
+        uploadStamp,
+        removeSignFromFile
       }}
     >
       {children}

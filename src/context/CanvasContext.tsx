@@ -6,6 +6,7 @@ interface CanvasContextType {
   canvasRef: React.RefObject<HTMLCanvasElement | null>;
   initializeCanvas: (file: File, selectedPageIndex: number) => void;
   uploadStamp: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  removeSignFromFile: () => void;
 }
 
 export const CanvasContext = createContext<CanvasContextType | null>(null);
