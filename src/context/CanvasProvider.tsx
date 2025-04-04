@@ -3,6 +3,14 @@ import * as fabric from 'fabric';
 import { getImageByPdf, loadPdf } from '@/utils';
 import { CanvasContext } from './CanvasContext';
 
+export interface CanvasContextType {
+  fabricCanvasRef: React.RefObject<fabric.Canvas | null>;
+  canvasRef: React.RefObject<HTMLCanvasElement | null>;
+  initializeCanvas: (file: File, selectedPageIndex: number) => void;
+  uploadStamp: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  removeSignFromFile: () => void;
+}
+
 const FABRIC_CANVAS_WIDTH = 500;
 const FABRIC_CANVAS_HEIGHT = parseFloat((FABRIC_CANVAS_WIDTH * Math.sqrt(2)).toFixed(2));
 
