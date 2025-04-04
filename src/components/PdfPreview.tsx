@@ -1,51 +1,69 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { useStore } from '@/store/index';
+
+import * as fabric from 'fabric';
 
 import { loadPdf, getImageByPdf, downloadPdf } from '../utils';
 import * as styles from './PdfPreview.css.ts';
 
+const FABRIC_CANVAS_WIDTH = 500;
+const FABRIC_CANVAS_HEIGHT = parseFloat((FABRIC_CANVAS_WIDTH * Math.sqrt(2)).toFixed(2));
+
 const PdfPreview = () => {
-  const { previewFile, signedFile, selectedPageIndex } = useStore();
+  const { previewFile, selectedPageIndex } = useStore();
   const file = previewFile();
-  const [fileImage, setFileImage] = useState('');
-  const [loading, setLoading] = useState(false);
+
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const fabricCanvasRef = useRef<fabric.Canvas | null>(null);
 
   useEffect(() => {
-    if (!file) return setFileImage('');
+    if (!file || !canvasRef.current) return;
+
+    fabricCanvasRef.current = new fabric.Canvas(canvasRef.current, {
+      width: FABRIC_CANVAS_WIDTH,
+      height: FABRIC_CANVAS_HEIGHT,
+      selection: false
+    });
 
     (async () => {
       const { pdf } = await loadPdf(file);
+      const image = await getImageByPdf(pdf, selectedPageIndex);
 
-      const loadedImage = await getImageByPdf(pdf, selectedPageIndex);
-      setFileImage(loadedImage);
+      const img = await fabric.FabricImage.fromURL(image!);
+      const scaleX = FABRIC_CANVAS_WIDTH / img.width;
+      const scaleY = FABRIC_CANVAS_HEIGHT / img.height;
+
+      img.set({
+        scaleX,
+        scaleY,
+        left: 0,
+        top: 0,
+        objectCaching: false
+      });
+
+      fabricCanvasRef.current!.backgroundImage = img;
+      fabricCanvasRef.current?.requestRenderAll();
     })();
+
+    return () => {
+      if (fabricCanvasRef.current) {
+        fabricCanvasRef.current.dispose();
+        fabricCanvasRef.current = null;
+      }
+    };
   }, [file, selectedPageIndex]);
-
-  const handleDownload = async () => {
-    if (!file) return;
-
-    setLoading(true);
-    await downloadPdf(file);
-    setLoading(false);
-  };
 
   return (
     <div className={styles.container}>
-      {file && fileImage ? (
-        <>
-          <img src={fileImage} alt="" className={styles.image} />
-          <button
-            disabled={!signedFile || loading}
-            type="button"
-            onClick={handleDownload}
-            className={styles.button}
-          >
-            {loading ? '다운로드 중....' : 'PDF 다운로드'}
+      <div>
+        <canvas ref={canvasRef} className={styles.canvas} />
+
+        {file && (
+          <button type="button" onClick={() => downloadPdf(file)} className={styles.button}>
+            PDF 다운로드
           </button>
-        </>
-      ) : (
-        <p>PDF를 업로드 해보세요.</p>
-      )}
+        )}
+      </div>
     </div>
   );
 };
