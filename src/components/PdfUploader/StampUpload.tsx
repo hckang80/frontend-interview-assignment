@@ -1,12 +1,13 @@
 import React, { memo, useRef } from 'react';
 import * as styles from './PdfUploader.css';
 import { Stamp } from '@/types';
+import { useCanvasContext } from '@/context/useCanvasContext';
 
 interface StampUploadProps {
   stamps: Stamp[];
   selectedStampIndex: number;
   setSelectedStampIndex: (index: number) => void;
-  handleStampChange: (e: React.ChangeEvent<HTMLInputElement>) => Promise<void>;
+  handleStampChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const StampUpload: React.FC<StampUploadProps> = ({
@@ -15,7 +16,13 @@ const StampUpload: React.FC<StampUploadProps> = ({
   setSelectedStampIndex,
   handleStampChange
 }) => {
+  const { uploadStamp } = useCanvasContext();
   const stampInputRef = useRef<HTMLInputElement>(null);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    handleStampChange(e);
+    if (!stamps.length) uploadStamp(e);
+  };
 
   const handleStampUpload = () => {
     stampInputRef.current?.click();
@@ -29,7 +36,7 @@ const StampUpload: React.FC<StampUploadProps> = ({
           type="file"
           accept="image/*"
           multiple
-          onChange={handleStampChange}
+          onChange={handleChange}
           style={{ display: 'none' }}
         />
         <button type="button" onClick={handleStampUpload} className={styles.button}>
