@@ -54,7 +54,7 @@ export const CanvasProvider = ({ children }: { children: ReactNode }) => {
     const { current: canvas } = fabricCanvasRef;
 
     if (!canvas) return;
-    removeSignFromFile(canvas);
+    resetStampOnCanvas(canvas);
 
     const reader = new FileReader();
 
@@ -70,7 +70,7 @@ export const CanvasProvider = ({ children }: { children: ReactNode }) => {
     reader.readAsDataURL(file);
   }
 
-  function removeSignFromFile(canvas: fabric.Canvas) {
+  function resetStampOnCanvas(canvas: fabric.Canvas) {
     const objects = canvas.getObjects();
     const lastObject = objects[objects.length - 1];
     canvas.remove(lastObject);
