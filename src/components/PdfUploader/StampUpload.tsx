@@ -16,12 +16,12 @@ const StampUpload: React.FC<StampUploadProps> = ({
   setSelectedStampIndex,
   handleStampChange
 }) => {
-  const { uploadStamp } = useCanvasContext();
+  const { placeStampOnCanvas } = useCanvasContext();
   const stampInputRef = useRef<HTMLInputElement>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     handleStampChange(e);
-    if (!stamps.length) uploadStamp(e);
+    if (!stamps.length && e.target.files) placeStampOnCanvas(e.target.files[0]);
   };
 
   const handleStampUpload = () => {

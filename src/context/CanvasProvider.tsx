@@ -7,7 +7,7 @@ export interface CanvasContextType {
   fabricCanvasRef: React.RefObject<fabric.Canvas | null>;
   canvasRef: React.RefObject<HTMLCanvasElement | null>;
   initializeCanvas: (file: File, selectedPageIndex: number) => void;
-  uploadStamp: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  placeStampOnCanvas: (file: File) => void;
   removeSignFromFile: () => void;
 }
 
@@ -51,12 +51,11 @@ export const CanvasProvider = ({ children }: { children: ReactNode }) => {
     })();
   };
 
-  function uploadStamp(e: React.ChangeEvent<HTMLInputElement>) {
+  function placeStampOnCanvas(file: File) {
     const { current: canvas } = fabricCanvasRef;
 
-    if (!canvas || !e.target.files) return;
+    if (!canvas) return;
 
-    const [file] = e.target.files;
     const reader = new FileReader();
 
     reader.onload = async (e) => {
@@ -69,7 +68,6 @@ export const CanvasProvider = ({ children }: { children: ReactNode }) => {
       canvas.setActiveObject(image);
     };
     reader.readAsDataURL(file);
-    e.target.value = '';
   }
 
   function removeSignFromFile() {
@@ -87,7 +85,7 @@ export const CanvasProvider = ({ children }: { children: ReactNode }) => {
         fabricCanvasRef,
         canvasRef,
         initializeCanvas,
-        uploadStamp,
+        placeStampOnCanvas,
         removeSignFromFile
       }}
     >
