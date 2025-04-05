@@ -28,6 +28,11 @@ const StampUpload: React.FC<StampUploadProps> = ({
     stampInputRef.current?.click();
   };
 
+  const handleClickStamp = (file: File, index: number) => {
+    setSelectedStampIndex(index);
+    placeStampOnCanvas(file);
+  };
+
   return (
     <div>
       <div className={styles.stampUpload}>
@@ -45,11 +50,11 @@ const StampUpload: React.FC<StampUploadProps> = ({
       </div>
 
       <div className={styles.stamps}>
-        {stamps.map(({ id, url }, index) => (
+        {stamps.map(({ id, url, file }, index) => (
           <button
             className={index === selectedStampIndex ? styles.stampButtonActive : styles.stampButton}
             key={id}
-            onClick={() => setSelectedStampIndex(index)}
+            onClick={() => handleClickStamp(file, index)}
           >
             <img src={url} alt="" className={styles.stampImage} />
           </button>

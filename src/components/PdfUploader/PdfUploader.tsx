@@ -26,7 +26,8 @@ const PdfUploader = () => {
       const newStamps = await Promise.all(
         Array.from(files).map(async (file) => ({
           id: crypto.randomUUID(),
-          url: await singleton(optimizeImage)(file)
+          url: await singleton(optimizeImage)(file),
+          file
         }))
       );
 
