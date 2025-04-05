@@ -8,7 +8,6 @@ export interface CanvasContextType {
   canvasRef: React.RefObject<HTMLCanvasElement | null>;
   initializeCanvas: (file: File, selectedPageIndex: number) => void;
   placeStampOnCanvas: (file: File) => void;
-  removeSignFromFile: () => void;
 }
 
 const FABRIC_CANVAS_WIDTH = 500;
@@ -55,6 +54,7 @@ export const CanvasProvider = ({ children }: { children: ReactNode }) => {
     const { current: canvas } = fabricCanvasRef;
 
     if (!canvas) return;
+    removeSignFromFile(canvas);
 
     const reader = new FileReader();
 
@@ -70,10 +70,7 @@ export const CanvasProvider = ({ children }: { children: ReactNode }) => {
     reader.readAsDataURL(file);
   }
 
-  function removeSignFromFile() {
-    const { current: canvas } = fabricCanvasRef;
-    if (!canvas) return;
-
+  function removeSignFromFile(canvas: fabric.Canvas) {
     const objects = canvas.getObjects();
     const lastObject = objects[objects.length - 1];
     canvas.remove(lastObject);
@@ -85,8 +82,7 @@ export const CanvasProvider = ({ children }: { children: ReactNode }) => {
         fabricCanvasRef,
         canvasRef,
         initializeCanvas,
-        placeStampOnCanvas,
-        removeSignFromFile
+        placeStampOnCanvas
       }}
     >
       {children}
