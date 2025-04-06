@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useStore } from '@/store/index';
+import { useFileStore } from '@/store';
 
 import * as styles from './PdfPages.css.ts';
 import { getImageByPdf, loadPdf } from '../utils/index.ts';
@@ -10,7 +10,7 @@ type FileImage = {
 };
 
 const PdfPages = () => {
-  const { previewFile, selectedPageIndex, setSelectedPageIndex } = useStore();
+  const { previewFile, selectedPageIndex, setSelectedPageIndex } = useFileStore();
   const file = previewFile();
   const [fileImages, setFileImages] = useState<FileImage[]>([]);
 

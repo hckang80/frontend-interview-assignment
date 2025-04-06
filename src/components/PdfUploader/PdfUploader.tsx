@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { useStore } from '@/store/index';
+import { useFileStore } from '@/store';
 
 import * as styles from './PdfUploader.css';
 import { singleton, optimizeImage, applyStampToPdf } from '@/utils';
@@ -9,7 +9,7 @@ import { useCanvasContext } from '@/context/useCanvasContext';
 
 const PdfUploader = () => {
   const { originFile, previewFile, setOriginFile, setSignedFile, resetFile, selectedPageIndex } =
-    useStore();
+    useFileStore();
   const file = previewFile();
   const { fabricCanvasRef } = useCanvasContext();
 

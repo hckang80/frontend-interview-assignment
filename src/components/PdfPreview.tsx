@@ -1,11 +1,11 @@
 import { downloadPdf } from '../utils';
 import * as styles from './PdfPreview.css.ts';
 import { useEffect } from 'react';
-import { useStore } from '@/store';
+import { useFileStore } from '@/store';
 import { useCanvasContext } from '@/context/useCanvasContext.ts';
 
 const PdfPreview = () => {
-  const { signedFile, previewFile, selectedPageIndex } = useStore();
+  const { signedFile, previewFile, selectedPageIndex } = useFileStore();
   const file = previewFile();
   const { fabricCanvasRef, canvasRef, initializeCanvas } = useCanvasContext();
 
