@@ -1,6 +1,6 @@
 import { PdfUploader } from './components/PdfUploader';
-import PdfPreview from './components/PdfPreview';
-import PdfPages from './components/PdfPages';
+import PdfPreview from './components/PdfPreview/PdfPreview.tsx';
+import PdfPages from './components/PdfPages/PdfPages.tsx';
 
 import './app.css.ts';
 import { CanvasProvider } from './context/CanvasProvider.tsx';

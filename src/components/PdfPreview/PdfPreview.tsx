@@ -1,4 +1,4 @@
-import { downloadPdf } from '../utils';
+import { downloadPdf } from '../../utils/index.ts';
 import * as styles from './PdfPreview.css.ts';
 import { useEffect, useState } from 'react';
 import { useFileStore } from '@/store';

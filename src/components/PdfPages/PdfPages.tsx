@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useFileStore } from '@/store';
 
 import * as styles from './PdfPages.css.ts';
-import { getImageByPdf, loadPdf } from '../utils/index.ts';
+import { getImageByPdf, loadPdf } from '../../utils/index.ts';
 
 type FileImage = {
   id: string;
