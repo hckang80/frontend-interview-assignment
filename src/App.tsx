@@ -1,9 +1,8 @@
-import { PdfUploader } from './components/PdfUploader';
-import PdfPreview from './components/PdfPreview/PdfPreview.tsx';
-import PdfPages from './components/PdfPages/PdfPages.tsx';
-
 import './app.css.ts';
-import { CanvasProvider } from './context/CanvasProvider.tsx';
+import { PdfUploader } from './components/PdfUploader';
+import PdfPreview from './components/PdfPreview/PdfPreview';
+import PdfPages from './components/PdfPages/PdfPages';
+import { CanvasProvider } from './context/CanvasProvider';
 
 function App() {
   return (
