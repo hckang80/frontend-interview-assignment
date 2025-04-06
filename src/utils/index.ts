@@ -55,17 +55,19 @@ export const downloadPdf = async (file: File) => {
     const pdfDoc = await PDFDocument.create();
     const { pdf, totalPages } = await loadPdf(file);
 
-    for (let pageNumber = 1; pageNumber <= totalPages; pageNumber++) {
-      const [pdfImage] = await Promise.all([
-        pdfDoc.embedPng(
-          await fetch(await getImageByPdf(pdf, pageNumber)).then((res) => res.arrayBuffer())
-        )
-      ]);
+    const imageDataUrls = await Promise.all(
+      Array.from({ length: totalPages }, (_, i) => getImageByPdf(pdf, i + 1))
+    );
+    const imageBuffers = await Promise.all(
+      imageDataUrls.map((url) => fetch(url).then((res) => res.arrayBuffer()))
+    );
+    const embeddedImages = await Promise.all(imageBuffers.map((bytes) => pdfDoc.embedPng(bytes)));
 
-      const { width, height } = pdfImage.scale(1);
+    for (const img of embeddedImages) {
+      const { width, height } = img.scale(1);
       const page = pdfDoc.addPage([width, height]);
 
-      page.drawImage(pdfImage, {
+      page.drawImage(img, {
         x: 0,
         y: 0,
         width,
