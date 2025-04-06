@@ -55,7 +55,7 @@ const PdfUploader = () => {
   return (
     <div className={styles.container}>
       <div className={styles.top}>
-        <PdfUpload />
+        <PdfUpload stamp={stamps[selectedStampIndex]} />
         <StampUpload
           stamps={stamps}
           selectedStampIndex={selectedStampIndex}

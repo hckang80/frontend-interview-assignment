@@ -1,24 +1,32 @@
 import React, { useRef, useCallback, memo } from 'react';
 import * as styles from './PdfUploader.css';
 import { useFileStore } from '@/store';
+import { Stamp } from '@/types';
+import { useCanvasContext } from '@/context/useCanvasContext';
 
-const PdfUpload = () => {
+interface PdfUploadProps {
+  stamp?: Stamp;
+}
+
+const PdfUpload: React.FC<PdfUploadProps> = ({ stamp }) => {
   const pdfInputRef = useRef<HTMLInputElement>(null);
   const { originFile, setOriginFile, resetFile } = useFileStore();
+  const { placeStampOnCanvas } = useCanvasContext();
 
   const handlePDFRemove = () => {
     resetFile();
   };
 
   const handlePDFChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
+    async (e: React.ChangeEvent<HTMLInputElement>) => {
       const { files } = e.target;
       if (!files) return;
 
       const [file] = files;
 
       handlePDFRemove();
-      setOriginFile(file);
+      await setOriginFile(file);
+      stamp?.file && placeStampOnCanvas(stamp.file);
 
       e.target.value = '';
     },
