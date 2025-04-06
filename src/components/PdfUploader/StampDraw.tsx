@@ -1,6 +1,7 @@
 import React, { memo } from 'react';
 import * as styles from './PdfUploader.css';
 import { Stamp } from '@/types';
+import { useFileStore } from '@/store';
 
 interface StampDrawProps {
   stamps: Stamp[];
@@ -8,11 +9,13 @@ interface StampDrawProps {
 }
 
 const StampDraw: React.FC<StampDrawProps> = ({ stamps, handleStampDraw }) => {
+  const { originFile } = useFileStore();
+
   return (
     <div>
       <button
         type="button"
-        disabled={!stamps.length}
+        disabled={!originFile || !stamps.length}
         onClick={handleStampDraw}
         className={styles.button}
       >
