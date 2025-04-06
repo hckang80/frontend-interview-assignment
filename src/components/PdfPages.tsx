@@ -10,7 +10,8 @@ type FileImage = {
 };
 
 const PdfPages = () => {
-  const { originFile: file, selectedPageIndex, setSelectedPageIndex } = useStore();
+  const { previewFile, selectedPageIndex, setSelectedPageIndex } = useStore();
+  const file = previewFile();
   const [fileImages, setFileImages] = useState<FileImage[]>([]);
 
   const isActive = (index: number) => selectedPageIndex === index;

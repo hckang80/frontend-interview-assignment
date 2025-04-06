@@ -8,7 +8,9 @@ import { Stamp } from '@/types';
 import { useCanvasContext } from '@/context/useCanvasContext';
 
 const PdfUploader = () => {
-  const { originFile, setOriginFile, resetFile, selectedPageIndex } = useStore();
+  const { originFile, previewFile, setOriginFile, setSignedFile, resetFile, selectedPageIndex } =
+    useStore();
+  const file = previewFile();
   const { fabricCanvasRef } = useCanvasContext();
 
   const [stamps, setStamps] = useState<Stamp[]>([]);
@@ -45,16 +47,16 @@ const PdfUploader = () => {
 
   const handleStampDraw = useCallback(async () => {
     const canvas = fabricCanvasRef?.current;
-    if (!originFile || !canvas) return;
+    if (!file || !canvas) return;
 
-    const file = await applyStampToPdf({
+    const updatedFile = await applyStampToPdf({
       canvas,
-      originFile,
+      originFile: file,
       pageNumber: selectedPageIndex
     });
 
-    setOriginFile(file);
-  }, [originFile, selectedPageIndex]);
+    setSignedFile(updatedFile);
+  }, [file, selectedPageIndex]);
 
   return (
     <div className={styles.container}>
