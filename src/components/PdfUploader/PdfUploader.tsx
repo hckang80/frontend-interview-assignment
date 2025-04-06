@@ -2,7 +2,7 @@ import React, { useState, useCallback } from 'react';
 import { useFileStore } from '@/store';
 
 import * as styles from './PdfUploader.css';
-import { singleton, optimizeImage, applyStampToPdf } from '@/utils';
+import { optimizeImage, applyStampToPdf } from '@/utils';
 import { PdfUpload, StampUpload, StampDraw } from '.';
 import { Stamp } from '@/types';
 import { useCanvasContext } from '@/context/useCanvasContext';
@@ -23,7 +23,7 @@ const PdfUploader = () => {
       const newStamps = await Promise.all(
         Array.from(files).map(async (file) => ({
           id: crypto.randomUUID(),
-          url: await singleton(optimizeImage)(file),
+          url: await optimizeImage(file),
           file
         }))
       );
