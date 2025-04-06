@@ -153,28 +153,6 @@ export const download = (blob: Blob, fileName: string) => {
 
   URL.revokeObjectURL(link.href);
 };
-export async function canvasToFile(canvas: fabric.Canvas, fileName = 'canvas.pdf'): Promise<File> {
-  const dataUrl = canvas.toDataURL({
-    format: 'png',
-    multiplier: 1
-  });
-  const imageData = await fetch(dataUrl).then((res) => res.arrayBuffer());
-
-  const pdfDoc = await PDFDocument.create();
-  const image = await pdfDoc.embedPng(imageData);
-
-  const page = pdfDoc.addPage([canvas.getWidth(), canvas.getHeight()]);
-  page.drawImage(image, {
-    x: 0,
-    y: 0,
-    width: canvas.getWidth(),
-    height: canvas.getHeight()
-  });
-
-  const pdfBytes = await pdfDoc.save();
-  const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-  return new File([blob], fileName, { type: 'application/pdf' });
-}
 
 export const applyStampToPdf = async ({
   canvas,
