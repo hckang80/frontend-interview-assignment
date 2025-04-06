@@ -90,10 +90,6 @@ export const optimizeImage = (file: File, maxWidth = 200, maxHeight = 200): Prom
     const objectUrl = URL.createObjectURL(file);
     img.src = objectUrl;
 
-    const cleanup = () => {
-      URL.revokeObjectURL(objectUrl);
-    };
-
     const processImage = () => {
       try {
         const canvas = document.createElement('canvas');
@@ -123,7 +119,7 @@ export const optimizeImage = (file: File, maxWidth = 200, maxHeight = 200): Prom
       } catch (error) {
         reject(error);
       } finally {
-        cleanup();
+        URL.revokeObjectURL(objectUrl);
       }
     };
 
