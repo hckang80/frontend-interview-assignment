@@ -5,8 +5,8 @@ type Store = {
   setOriginFile: (file: File | null) => void;
   signedFile: File | null;
   setSignedFile: (file: File | null) => void;
-  selectedPageIndex: number;
-  setSelectedPageIndex: (index: number) => void;
+  selectedPageFileIndex: number;
+  setSelectedPageFileIndex: (index: number) => void;
   previewFile: () => File | null;
   resetFile: () => void;
 };
@@ -16,16 +16,16 @@ export const useFileStore = create<Store>((set, get) => ({
   setOriginFile: (file: File | null) => set({ originFile: file }),
   signedFile: null,
   setSignedFile: (file: File | null) => set({ signedFile: file }),
-  selectedPageIndex: 1,
-  setSelectedPageIndex: (index: number) => set({ selectedPageIndex: index }),
+  selectedPageFileIndex: 1,
+  setSelectedPageFileIndex: (index: number) => set({ selectedPageFileIndex: index }),
   previewFile: () => {
     const { signedFile, originFile } = get();
     return signedFile || originFile;
   },
   resetFile: () => {
-    const { setOriginFile, setSignedFile, setSelectedPageIndex } = get();
+    const { setOriginFile, setSignedFile, setSelectedPageFileIndex } = get();
     setOriginFile(null);
     setSignedFile(null);
-    setSelectedPageIndex(1);
+    setSelectedPageFileIndex(1);
   }
 }));

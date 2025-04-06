@@ -18,7 +18,7 @@ export const CanvasProvider = ({ children }: { children: ReactNode }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const fabricCanvasRef = useRef<fabric.Canvas | null>(null);
 
-  const initializeCanvas = async (file: File, selectedPageIndex: number) => {
+  const initializeCanvas = async (file: File, selectedPageFileIndex: number) => {
     if (!file || !canvasRef.current) return;
 
     if (!fabricCanvasRef.current) {
@@ -30,7 +30,7 @@ export const CanvasProvider = ({ children }: { children: ReactNode }) => {
     }
 
     const { pdf } = await loadPdf(file);
-    const image = await getImageByPdf(pdf, selectedPageIndex);
+    const image = await getImageByPdf(pdf, selectedPageFileIndex);
     const img = await fabric.FabricImage.fromURL(image!);
 
     const scaleX = FABRIC_CANVAS_WIDTH / img.width;

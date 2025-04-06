@@ -10,11 +10,11 @@ type FileImage = {
 };
 
 const PdfPages = () => {
-  const { previewFile, selectedPageIndex, setSelectedPageIndex } = useFileStore();
+  const { previewFile, selectedPageFileIndex, setSelectedPageFileIndex } = useFileStore();
   const file = previewFile();
   const [fileImages, setFileImages] = useState<FileImage[]>([]);
 
-  const isActive = (index: number) => selectedPageIndex === index;
+  const isActive = (index: number) => selectedPageFileIndex === index;
 
   useEffect(() => {
     if (!file) return setFileImages([]);
@@ -39,7 +39,7 @@ const PdfPages = () => {
       <div className={styles.top}>
         {file &&
           fileImages.map(({ id, url }, index) => (
-            <div key={id} onClick={() => setSelectedPageIndex(index + 1)}>
+            <div key={id} onClick={() => setSelectedPageFileIndex(index + 1)}>
               <button className={isActive(index + 1) ? styles.buttonActive : styles.button}>
                 <img src={url} alt="" className={styles.imageContent} />
               </button>

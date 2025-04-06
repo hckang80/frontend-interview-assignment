@@ -5,15 +5,15 @@ import { useFileStore } from '@/store';
 import { useCanvasContext } from '@/context/useCanvasContext.ts';
 
 const PdfPreview = () => {
-  const { signedFile, previewFile, selectedPageIndex } = useFileStore();
+  const { signedFile, previewFile, selectedPageFileIndex } = useFileStore();
   const file = previewFile();
   const { canvasRef, initializeCanvas, clearCanvas } = useCanvasContext();
 
   useEffect(() => {
     if (!file) return;
 
-    initializeCanvas(file, selectedPageIndex);
-  }, [file, selectedPageIndex]);
+    initializeCanvas(file, selectedPageFileIndex);
+  }, [file, selectedPageFileIndex]);
 
   useEffect(() => {
     if (file) return;
