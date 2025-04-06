@@ -2,14 +2,13 @@ import React, { useState, useCallback } from 'react';
 import { useStore } from '@/store/index';
 
 import * as styles from './PdfUploader.css';
-import { PDFDocument } from 'pdf-lib';
-import { singleton, optimizeImage, canvasToFile } from '@/utils';
+import { singleton, optimizeImage, applyStampToPdf } from '@/utils';
 import { PdfUpload, StampUpload, StampDraw } from '.';
 import { Stamp } from '@/types';
 import { useCanvasContext } from '@/context/useCanvasContext';
 
 const PdfUploader = () => {
-  const { originFile, setOriginFile, setSignedFile, resetFile } = useStore();
+  const { originFile, setOriginFile, resetFile, selectedPageIndex } = useStore();
   const { fabricCanvasRef } = useCanvasContext();
 
   const [stamps, setStamps] = useState<Stamp[]>([]);
@@ -44,27 +43,18 @@ const PdfUploader = () => {
     [setStamps]
   );
 
-  const getUpdatedFile = useCallback(
-    async (file: File) => {
-      const fileArrayBuffer = await file.arrayBuffer();
-      const pdfDoc = await PDFDocument.load(fileArrayBuffer);
-      const pdfBytes = await pdfDoc.save();
-      const pdfBlob = new Blob([pdfBytes], { type: 'application/pdf' });
-
-      return new File([pdfBlob], file.name, { type: 'application/pdf' });
-    },
-    [stamps, selectedStampIndex]
-  );
-
   const handleStampDraw = useCallback(async () => {
     const canvas = fabricCanvasRef?.current;
-    if (!canvas) return;
+    if (!originFile || !canvas) return;
 
-    const file = await canvasToFile(canvas);
-    const signedFile = await getUpdatedFile(file);
+    const file = await applyStampToPdf({
+      canvas,
+      originFile,
+      pageNumber: selectedPageIndex
+    });
 
-    setSignedFile(signedFile);
-  }, [setSignedFile, getUpdatedFile]);
+    setOriginFile(file);
+  }, [originFile, selectedPageIndex]);
 
   return (
     <div className={styles.container}>
