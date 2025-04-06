@@ -13,14 +13,14 @@ const PdfPreview = () => {
     if (!file) return;
 
     initializeCanvas(file, selectedPageIndex);
+  }, [file, selectedPageIndex]);
 
-    return () => {
-      if (fabricCanvasRef.current) {
-        fabricCanvasRef.current.dispose();
-        fabricCanvasRef.current = null;
-      }
-    };
-  }, [file, selectedPageIndex, initializeCanvas]);
+  useEffect(() => {
+    if (!file && fabricCanvasRef.current) {
+      fabricCanvasRef.current.dispose();
+      fabricCanvasRef.current = null;
+    }
+  }, [file]);
 
   return (
     <div className={styles.container}>

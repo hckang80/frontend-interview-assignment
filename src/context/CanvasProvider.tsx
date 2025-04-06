@@ -17,37 +17,37 @@ export const CanvasProvider = ({ children }: { children: ReactNode }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const fabricCanvasRef = useRef<fabric.Canvas | null>(null);
 
-  const initializeCanvas = (file: File, selectedPageIndex: number) => {
+  const initializeCanvas = async (file: File, selectedPageIndex: number) => {
     if (!file || !canvasRef.current) return;
 
-    fabricCanvasRef.current = new fabric.Canvas(canvasRef.current, {
-      width: FABRIC_CANVAS_WIDTH,
-      height: FABRIC_CANVAS_HEIGHT,
-      selection: false
+    if (!fabricCanvasRef.current) {
+      fabricCanvasRef.current = new fabric.Canvas(canvasRef.current, {
+        width: FABRIC_CANVAS_WIDTH,
+        height: FABRIC_CANVAS_HEIGHT,
+        selection: false
+      });
+    }
+
+    const { pdf } = await loadPdf(file);
+    const image = await getImageByPdf(pdf, selectedPageIndex);
+    const img = await fabric.FabricImage.fromURL(image!);
+
+    const scaleX = FABRIC_CANVAS_WIDTH / img.width;
+    const scaleY = FABRIC_CANVAS_HEIGHT / img.height;
+
+    img.set({
+      scaleX,
+      scaleY,
+      left: 0,
+      top: 0,
+      objectCaching: false
     });
 
-    (async () => {
-      const { pdf } = await loadPdf(file);
-      const image = await getImageByPdf(pdf, selectedPageIndex);
-
-      const img = await fabric.FabricImage.fromURL(image!);
-      const scaleX = FABRIC_CANVAS_WIDTH / img.width;
-      const scaleY = FABRIC_CANVAS_HEIGHT / img.height;
-
-      img.set({
-        scaleX,
-        scaleY,
-        left: 0,
-        top: 0,
-        objectCaching: false
-      });
-
-      if (fabricCanvasRef.current) {
-        fabricCanvasRef.current.backgroundImage = img;
-        fabricCanvasRef.current.requestRenderAll();
-        fabricCanvasRef.current.renderAll();
-      }
-    })();
+    if (fabricCanvasRef.current) {
+      fabricCanvasRef.current.backgroundImage = img;
+      fabricCanvasRef.current.requestRenderAll();
+      fabricCanvasRef.current.renderAll();
+    }
   };
 
   function placeStampOnCanvas(file: File) {
