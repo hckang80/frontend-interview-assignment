@@ -25,6 +25,7 @@ export const button = style({
   flex: '0 0 auto',
   flexDirection: 'column',
   overflow: 'hidden',
+  position: 'relative',
   width: '160px',
   borderRadius: '12px'
 });

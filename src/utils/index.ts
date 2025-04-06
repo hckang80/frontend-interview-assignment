@@ -1,6 +1,7 @@
 import { PDFDocument } from 'pdf-lib';
 import * as pdfjsLib from 'pdfjs-dist';
 import workerSrc from 'pdfjs-dist/build/pdf.worker?url';
+import * as fabric from 'fabric';
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = workerSrc;
 
@@ -28,11 +29,12 @@ export const loadPdf = async (
 
 export const getImageByPdf = async (
   pdf: pdfjsLib.PDFDocumentProxy,
-  pageNumber = 1
+  pageNumber: number,
+  scale = 3
 ): Promise<string> => {
   try {
     const page = await pdf.getPage(pageNumber);
-    const viewport = page.getViewport({ scale: 2 });
+    const viewport = page.getViewport({ scale });
 
     const canvas = document.createElement('canvas');
     const context = canvas.getContext('2d');
@@ -54,17 +56,19 @@ export const downloadPdf = async (file: File) => {
     const pdfDoc = await PDFDocument.create();
     const { pdf, totalPages } = await loadPdf(file);
 
-    for (let pageNumber = 1; pageNumber <= totalPages; pageNumber++) {
-      const [pdfImage] = await Promise.all([
-        pdfDoc.embedPng(
-          await fetch(await getImageByPdf(pdf, pageNumber)).then((res) => res.arrayBuffer())
-        )
-      ]);
+    const imageDataUrls = await Promise.all(
+      Array.from({ length: totalPages }, (_, i) => getImageByPdf(pdf, i + 1))
+    );
+    const imageBuffers = await Promise.all(
+      imageDataUrls.map((url) => fetch(url).then((res) => res.arrayBuffer()))
+    );
+    const embeddedImages = await Promise.all(imageBuffers.map((bytes) => pdfDoc.embedPng(bytes)));
 
-      const { width, height } = pdfImage.scale(1);
+    for (const img of embeddedImages) {
+      const { width, height } = img.scale(1);
       const page = pdfDoc.addPage([width, height]);
 
-      page.drawImage(pdfImage, {
+      page.drawImage(img, {
         x: 0,
         y: 0,
         width,
@@ -88,10 +92,6 @@ export const optimizeImage = (file: File, maxWidth = 200, maxHeight = 200): Prom
     img.crossOrigin = 'anonymous';
     const objectUrl = URL.createObjectURL(file);
     img.src = objectUrl;
-
-    const cleanup = () => {
-      URL.revokeObjectURL(objectUrl);
-    };
 
     const processImage = () => {
       try {
@@ -122,7 +122,7 @@ export const optimizeImage = (file: File, maxWidth = 200, maxHeight = 200): Prom
       } catch (error) {
         reject(error);
       } finally {
-        cleanup();
+        URL.revokeObjectURL(objectUrl);
       }
     };
 
@@ -151,4 +151,37 @@ export const download = (blob: Blob, fileName: string) => {
   link.click();
 
   URL.revokeObjectURL(link.href);
+};
+
+export const applyStampToPdf = async ({
+  canvas,
+  originFile,
+  pageNumber
+}: {
+  canvas: fabric.Canvas;
+  originFile: File;
+  pageNumber: number;
+}) => {
+  const fileArrayBuffer = await originFile.arrayBuffer();
+  const pdfDoc = await PDFDocument.load(new Uint8Array(fileArrayBuffer));
+  const dataUrl = canvas.toDataURL({
+    format: 'png',
+    multiplier: 3
+  });
+
+  const [, imageBytes] = dataUrl.split(',');
+  const pngImage = await pdfDoc.embedPng(imageBytes);
+
+  const page = pdfDoc.getPages()[pageNumber - 1];
+  const { width, height } = page.getSize();
+
+  page.drawImage(pngImage, {
+    x: 0,
+    y: 0,
+    width,
+    height
+  });
+
+  const newPdfBytes = await pdfDoc.save();
+  return new File([newPdfBytes], originFile.name, { type: 'application/pdf' });
 };
