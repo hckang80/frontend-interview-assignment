@@ -7,7 +7,7 @@ import { useCanvasContext } from '@/context/useCanvasContext.ts';
 const PdfPreview = () => {
   const { signedFile, previewFile, selectedPageIndex } = useFileStore();
   const file = previewFile();
-  const { fabricCanvasRef, canvasRef, initializeCanvas } = useCanvasContext();
+  const { canvasRef, initializeCanvas, clearCanvas } = useCanvasContext();
 
   useEffect(() => {
     if (!file) return;
@@ -16,10 +16,8 @@ const PdfPreview = () => {
   }, [file, selectedPageIndex]);
 
   useEffect(() => {
-    if (!file && fabricCanvasRef.current) {
-      fabricCanvasRef.current.dispose();
-      fabricCanvasRef.current = null;
-    }
+    if (file) return;
+    clearCanvas();
   }, [file]);
 
   return (

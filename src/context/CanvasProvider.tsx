@@ -7,6 +7,7 @@ export interface CanvasContextType {
   fabricCanvasRef: React.RefObject<fabric.Canvas | null>;
   canvasRef: React.RefObject<HTMLCanvasElement | null>;
   initializeCanvas: (file: File, selectedPageIndex: number) => void;
+  clearCanvas: () => void;
   placeStampOnCanvas: (file: File) => void;
 }
 
@@ -50,6 +51,12 @@ export const CanvasProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  const clearCanvas = () => {
+    if (!fabricCanvasRef.current) return;
+    fabricCanvasRef.current.dispose();
+    fabricCanvasRef.current = null;
+  };
+
   function placeStampOnCanvas(file: File) {
     const { current: canvas } = fabricCanvasRef;
 
@@ -82,6 +89,7 @@ export const CanvasProvider = ({ children }: { children: ReactNode }) => {
         fabricCanvasRef,
         canvasRef,
         initializeCanvas,
+        clearCanvas,
         placeStampOnCanvas
       }}
     >
