@@ -1,14 +1,14 @@
 import React, { useRef, useCallback, memo } from 'react';
 import * as styles from './PdfUploader.css';
+import { useFileStore } from '@/store';
 
-interface PdfUploadProps {
-  originFile: File | null;
-  setOriginFile: (file: File) => void;
-  handlePDFRemove: () => void;
-}
-
-const PdfUpload: React.FC<PdfUploadProps> = ({ originFile, setOriginFile, handlePDFRemove }) => {
+const PdfUpload = () => {
   const pdfInputRef = useRef<HTMLInputElement>(null);
+  const { originFile, setOriginFile, resetFile } = useFileStore();
+
+  const handlePDFRemove = () => {
+    resetFile();
+  };
 
   const handlePDFChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {

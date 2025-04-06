@@ -8,18 +8,11 @@ import { Stamp } from '@/types';
 import { useCanvasContext } from '@/context/useCanvasContext';
 
 const PdfUploader = () => {
-  const { originFile, previewFile, setOriginFile, setSignedFile, resetFile, selectedPageIndex } =
-    useFileStore();
+  const { previewFile, setSignedFile, selectedPageIndex } = useFileStore();
   const file = previewFile();
   const { fabricCanvasRef } = useCanvasContext();
 
   const [stamps, setStamps] = useState<Stamp[]>([]);
-  const [selectedStampIndex, setSelectedStampIndex] = useState(0);
-
-  const handlePDFRemove = () => {
-    resetFile();
-    setSelectedStampIndex(0);
-  };
 
   const handleStampChange = useCallback(
     async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -61,17 +54,8 @@ const PdfUploader = () => {
   return (
     <div className={styles.container}>
       <div className={styles.top}>
-        <PdfUpload
-          originFile={originFile}
-          setOriginFile={setOriginFile}
-          handlePDFRemove={handlePDFRemove}
-        />
-        <StampUpload
-          stamps={stamps}
-          selectedStampIndex={selectedStampIndex}
-          setSelectedStampIndex={setSelectedStampIndex}
-          handleStampChange={handleStampChange}
-        />
+        <PdfUpload />
+        <StampUpload stamps={stamps} handleStampChange={handleStampChange} />
       </div>
 
       <div className={styles.bottom}>
