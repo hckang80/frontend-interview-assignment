@@ -1,15 +1,21 @@
-import React, { memo, useRef, useState } from 'react';
+import React, { memo, useRef } from 'react';
 import * as styles from './PdfUploader.css';
 import { Stamp } from '@/types';
 import { useCanvasContext } from '@/context/useCanvasContext';
 
 interface StampUploadProps {
   stamps: Stamp[];
+  selectedStampIndex: number;
+  setSelectedStampIndex: (index: number) => void;
   handleStampChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const StampUpload: React.FC<StampUploadProps> = ({ stamps, handleStampChange }) => {
-  const [selectedStampIndex, setSelectedStampIndex] = useState(0);
+const StampUpload: React.FC<StampUploadProps> = ({
+  stamps,
+  selectedStampIndex,
+  setSelectedStampIndex,
+  handleStampChange
+}) => {
   const { placeStampOnCanvas } = useCanvasContext();
   const stampInputRef = useRef<HTMLInputElement>(null);
 
