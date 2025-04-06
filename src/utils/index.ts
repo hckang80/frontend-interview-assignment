@@ -29,11 +29,12 @@ export const loadPdf = async (
 
 export const getImageByPdf = async (
   pdf: pdfjsLib.PDFDocumentProxy,
-  pageNumber = 1
+  pageNumber: number,
+  scale = 3
 ): Promise<string> => {
   try {
     const page = await pdf.getPage(pageNumber);
-    const viewport = page.getViewport({ scale: 5 });
+    const viewport = page.getViewport({ scale });
 
     const canvas = document.createElement('canvas');
     const context = canvas.getContext('2d');
