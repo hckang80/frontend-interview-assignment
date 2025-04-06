@@ -18,6 +18,7 @@ const PdfPreview = () => {
 
   useEffect(() => {
     if (file) return;
+
     clearCanvas();
   }, [file]);
 
