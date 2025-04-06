@@ -51,7 +51,10 @@ const PdfPages = () => {
         {file &&
           fileImages.map(({ id, url }, index) => (
             <div key={id} onClick={() => setSelectedPageFileIndex(index + 1)}>
-              <button className={isActive(index + 1) ? styles.buttonActive : styles.button}>
+              <button
+                disabled={loading}
+                className={isActive(index + 1) ? styles.buttonActive : styles.button}
+              >
                 <img src={url} alt="" className={styles.imageContent} />
                 <SyncLoader
                   loading={loading && isActive(index + 1)}
