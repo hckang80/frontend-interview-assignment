@@ -175,3 +175,36 @@ export async function canvasToFile(canvas: fabric.Canvas, fileName = 'canvas.pdf
   const blob = new Blob([pdfBytes], { type: 'application/pdf' });
   return new File([blob], fileName, { type: 'application/pdf' });
 }
+
+export const applyStampToPdf = async ({
+  canvas,
+  originFile,
+  pageNumber
+}: {
+  canvas: fabric.Canvas;
+  originFile: File;
+  pageNumber: number;
+}) => {
+  const fileArrayBuffer = await originFile.arrayBuffer();
+  const pdfDoc = await PDFDocument.load(new Uint8Array(fileArrayBuffer));
+  const dataUrl = canvas.toDataURL({
+    format: 'png',
+    multiplier: 3
+  });
+
+  const [, imageBytes] = dataUrl.split(',');
+  const pngImage = await pdfDoc.embedPng(imageBytes);
+
+  const page = pdfDoc.getPages()[pageNumber - 1];
+  const { width, height } = page.getSize();
+
+  page.drawImage(pngImage, {
+    x: 0,
+    y: 0,
+    width,
+    height
+  });
+
+  const newPdfBytes = await pdfDoc.save();
+  return new File([newPdfBytes], originFile.name, { type: 'application/pdf' });
+};
