@@ -6,7 +6,7 @@ import { CanvasContext } from './CanvasContext';
 export interface CanvasContextType {
   fabricCanvasRef: React.RefObject<fabric.Canvas | null>;
   canvasRef: React.RefObject<HTMLCanvasElement | null>;
-  initializeCanvas: (file: File, selectedPageIndex: number) => void;
+  initializeCanvas: (file: File, selectedPageIndex: number) => Promise<void>;
   clearCanvas: () => void;
   placeStampOnCanvas: (file: File) => void;
 }
