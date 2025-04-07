@@ -1,9 +1,9 @@
-import { downloadPdf } from '../../utils/index.ts';
+import { downloadPdf } from '@/utils';
 import * as styles from './PdfPreview.css.ts';
 import { useEffect, useState } from 'react';
 import { useFileStore } from '@/store';
 import { useCanvasContext } from '@/context/useCanvasContext.ts';
-import { Loading } from '../shared';
+import { Loading } from '@/components/shared';
 
 const PdfPreview = () => {
   const { signedFile, previewFile, selectedPageFileIndex } = useFileStore();

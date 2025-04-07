@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 import { useFileStore } from '@/store';
 
 import * as styles from './PdfPages.css.ts';
-import { getImageByPdf, loadPdf } from '../../utils/index.ts';
-import { Loading } from '../shared';
+import { getImageByPdf, loadPdf } from '@/utils';
+import { Loading } from '@/components/shared';
 
 type FileImage = {
   id: string;
