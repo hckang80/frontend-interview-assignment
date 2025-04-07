@@ -23,9 +23,9 @@ const PdfPreview = () => {
     if (!file) return;
 
     (async () => {
-      setDownloading(true);
+      setLoading(true);
       await initializeCanvas(file, selectedPageFileIndex);
-      setDownloading(false);
+      setLoading(false);
     })();
   }, [file, selectedPageFileIndex]);
 
@@ -38,9 +38,9 @@ const PdfPreview = () => {
   const handleDownload = async () => {
     if (!file) return;
 
-    setLoading(true);
+    setDownloading(true);
     await downloadPdf(file);
-    setLoading(false);
+    setDownloading(false);
   };
 
   return (
@@ -49,7 +49,7 @@ const PdfPreview = () => {
         <canvas ref={canvasRef} className={styles.canvas} />
 
         <SyncLoader
-          loading={downloading}
+          loading={loading}
           cssOverride={override}
           color="var(--primary)"
           size={20}
@@ -59,12 +59,12 @@ const PdfPreview = () => {
 
         {file && (
           <button
-            disabled={!signedFile || loading}
+            disabled={!signedFile || downloading}
             type="button"
             onClick={handleDownload}
             className={styles.button}
           >
-            {loading ? '다운로드 중....' : 'PDF 다운로드'}
+            {downloading ? '다운로드 중....' : 'PDF 다운로드'}
           </button>
         )}
       </div>
