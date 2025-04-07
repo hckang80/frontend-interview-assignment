@@ -1,6 +1,6 @@
 import React, { memo, useRef } from 'react';
 import * as styles from './PdfUploader.css';
-import { Stamp } from '@/types';
+import type { Stamp } from '@/types';
 import { useCanvasContext } from '@/context/useCanvasContext';
 
 interface StampUploadProps {
@@ -16,21 +16,21 @@ const StampUpload: React.FC<StampUploadProps> = ({
   setSelectedStampIndex,
   handleStampChange
 }) => {
-  const { placeStampOnCanvas } = useCanvasContext();
+  const { addStampOnCanvas } = useCanvasContext();
   const stampInputRef = useRef<HTMLInputElement>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     handleStampChange(e);
-    if (!stamps.length && e.target.files) placeStampOnCanvas(e.target.files[0]);
+    if (!stamps.length && e.target.files) addStampOnCanvas(e.target.files[0]);
   };
 
   const handleStampUpload = () => {
     stampInputRef.current?.click();
   };
 
-  const handleClickStamp = (file: File, index: number) => {
+  const handleStampClick = (file: File, index: number) => {
     setSelectedStampIndex(index);
-    placeStampOnCanvas(file);
+    addStampOnCanvas(file);
   };
 
   return (
@@ -58,7 +58,7 @@ const StampUpload: React.FC<StampUploadProps> = ({
                 : styles.stampButton
             }
             key={id}
-            onClick={() => handleClickStamp(file, index)}
+            onClick={() => handleStampClick(file, index)}
           >
             <img src={url} alt="" className={styles.stampImage} />
           </button>

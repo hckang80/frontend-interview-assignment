@@ -29,9 +29,11 @@ export const loadPdf = async (
 
 export const getImageByPdf = async (
   pdf: pdfjsLib.PDFDocumentProxy,
-  pageNumber: number,
+  pageIndex: number,
   scale = 3
 ): Promise<string> => {
+  const pageNumber = pageIndex + 1;
+
   try {
     const page = await pdf.getPage(pageNumber);
     const viewport = page.getViewport({ scale });
@@ -57,7 +59,7 @@ export const downloadPdf = async (file: File) => {
     const { pdf, totalPages } = await loadPdf(file);
 
     const imageDataUrls = await Promise.all(
-      Array.from({ length: totalPages }, (_, i) => getImageByPdf(pdf, i + 1))
+      Array.from({ length: totalPages }, (_, i) => getImageByPdf(pdf, i))
     );
     const imageBuffers = await Promise.all(
       imageDataUrls.map((url) => fetch(url).then((res) => res.arrayBuffer()))
@@ -156,11 +158,11 @@ export const download = (blob: Blob, fileName: string) => {
 export const applyStampToPdf = async ({
   canvas,
   originFile,
-  pageNumber
+  pageIndex
 }: {
   canvas: fabric.Canvas;
   originFile: File;
-  pageNumber: number;
+  pageIndex: number;
 }) => {
   const fileArrayBuffer = await originFile.arrayBuffer();
   const pdfDoc = await PDFDocument.load(new Uint8Array(fileArrayBuffer));
@@ -172,7 +174,7 @@ export const applyStampToPdf = async ({
   const [, imageBytes] = dataUrl.split(',');
   const pngImage = await pdfDoc.embedPng(imageBytes);
 
-  const page = pdfDoc.getPages()[pageNumber - 1];
+  const page = pdfDoc.getPages()[pageIndex];
   const { width, height } = page.getSize();
 
   page.drawImage(pngImage, {

@@ -16,7 +16,7 @@ export const useFileStore = create<Store>((set, get) => ({
   setOriginFile: (file: File | null) => set({ originFile: file }),
   signedFile: null,
   setSignedFile: (file: File | null) => set({ signedFile: file }),
-  selectedPageFileIndex: 1,
+  selectedPageFileIndex: 0,
   setSelectedPageFileIndex: (index: number) => set({ selectedPageFileIndex: index }),
   previewFile: () => {
     const { signedFile, originFile } = get();
@@ -26,6 +26,6 @@ export const useFileStore = create<Store>((set, get) => ({
     const { setOriginFile, setSignedFile, setSelectedPageFileIndex } = get();
     setOriginFile(null);
     setSignedFile(null);
-    setSelectedPageFileIndex(1);
+    setSelectedPageFileIndex(0);
   }
 }));
