@@ -45,7 +45,7 @@ const PdfUploader = () => {
     const updatedFile = await applyStampToPdf({
       canvas,
       originFile: file,
-      pageNumber: selectedPageFileIndex
+      pageIndex: selectedPageFileIndex
     });
 
     setSignedFile(updatedFile);

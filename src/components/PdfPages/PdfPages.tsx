@@ -21,11 +21,11 @@ const PdfPages = () => {
       setLoading(true);
       const { totalPages, pdf } = await loadPdf(file);
 
-      const pageNumbers = Array.from({ length: totalPages }, (_, i) => i);
+      const pageIndices = Array.from({ length: totalPages }, (_, i) => i);
       const loadedImages = await Promise.all(
-        pageNumbers.map(async (pageNumber) => ({
+        pageIndices.map(async (pageIndex) => ({
           id: crypto.randomUUID(),
-          url: await getImageByPdf(pdf, pageNumber)
+          url: await getImageByPdf(pdf, pageIndex)
         }))
       );
 

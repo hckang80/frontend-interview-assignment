@@ -158,11 +158,11 @@ export const download = (blob: Blob, fileName: string) => {
 export const applyStampToPdf = async ({
   canvas,
   originFile,
-  pageNumber
+  pageIndex
 }: {
   canvas: fabric.Canvas;
   originFile: File;
-  pageNumber: number;
+  pageIndex: number;
 }) => {
   const fileArrayBuffer = await originFile.arrayBuffer();
   const pdfDoc = await PDFDocument.load(new Uint8Array(fileArrayBuffer));
@@ -174,7 +174,7 @@ export const applyStampToPdf = async ({
   const [, imageBytes] = dataUrl.split(',');
   const pngImage = await pdfDoc.embedPng(imageBytes);
 
-  const page = pdfDoc.getPages()[pageNumber];
+  const page = pdfDoc.getPages()[pageIndex];
   const { width, height } = page.getSize();
 
   page.drawImage(pngImage, {
