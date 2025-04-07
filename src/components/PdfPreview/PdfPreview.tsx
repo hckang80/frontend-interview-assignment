@@ -1,19 +1,32 @@
 import { downloadPdf } from '../../utils/index.ts';
 import * as styles from './PdfPreview.css.ts';
-import { useEffect, useState } from 'react';
+import { CSSProperties, useEffect, useState } from 'react';
 import { useFileStore } from '@/store';
 import { useCanvasContext } from '@/context/useCanvasContext.ts';
+import SyncLoader from 'react-spinners/SyncLoader';
+
+const override: CSSProperties = {
+  position: 'absolute',
+  left: '50%',
+  top: '50%',
+  transform: 'translate(-50%, -50%)'
+};
 
 const PdfPreview = () => {
   const { signedFile, previewFile, selectedPageFileIndex } = useFileStore();
   const file = previewFile();
   const { canvasRef, initializeCanvas, clearCanvas } = useCanvasContext();
   const [loading, setLoading] = useState(false);
+  const [downloading, setDownloading] = useState(false);
 
   useEffect(() => {
     if (!file) return;
 
-    initializeCanvas(file, selectedPageFileIndex);
+    (async () => {
+      setDownloading(true);
+      await initializeCanvas(file, selectedPageFileIndex);
+      setDownloading(false);
+    })();
   }, [file, selectedPageFileIndex]);
 
   useEffect(() => {
@@ -34,6 +47,15 @@ const PdfPreview = () => {
     <div className={styles.container}>
       <div>
         <canvas ref={canvasRef} className={styles.canvas} />
+
+        <SyncLoader
+          loading={downloading}
+          cssOverride={override}
+          color="var(--primary)"
+          size={20}
+          aria-label="Loading Spinner"
+          data-testid="loader"
+        />
 
         {file && (
           <button
