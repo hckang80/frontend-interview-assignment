@@ -1,5 +1,8 @@
-export type Stamp = {
+export type FileImage = {
   id: string;
   url: string;
-  file: File;
 };
+
+export type Stamp = {
+  file: File;
+} & FileImage;

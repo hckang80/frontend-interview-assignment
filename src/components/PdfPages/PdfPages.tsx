@@ -4,11 +4,7 @@ import { useFileStore } from '@/store';
 import * as styles from './PdfPages.css.ts';
 import { getImageByPdf, loadPdf } from '@/utils';
 import { Loading } from '@/components/shared';
-
-type FileImage = {
-  id: string;
-  url: string;
-};
+import type { FileImage } from '@/types';
 
 const PdfPages = () => {
   const { previewFile, selectedPageFileIndex, setSelectedPageFileIndex } = useFileStore();

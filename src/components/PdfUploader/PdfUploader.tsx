@@ -4,7 +4,7 @@ import { useFileStore } from '@/store';
 import * as styles from './PdfUploader.css';
 import { optimizeImage, applyStampToPdf } from '@/utils';
 import { PdfUpload, StampUpload, StampDraw } from '.';
-import { Stamp } from '@/types';
+import type { Stamp } from '@/types';
 import { useCanvasContext } from '@/context/useCanvasContext';
 
 const PdfUploader = () => {

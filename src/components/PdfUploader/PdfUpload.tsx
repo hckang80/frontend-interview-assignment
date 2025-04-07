@@ -1,7 +1,7 @@
 import React, { useRef, useCallback, memo } from 'react';
 import * as styles from './PdfUploader.css';
 import { useFileStore } from '@/store';
-import { Stamp } from '@/types';
+import type { Stamp } from '@/types';
 import { useCanvasContext } from '@/context/useCanvasContext';
 
 interface PdfUploadProps {

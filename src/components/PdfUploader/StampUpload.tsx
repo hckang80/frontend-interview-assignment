@@ -1,6 +1,6 @@
 import React, { memo, useRef } from 'react';
 import * as styles from './PdfUploader.css';
-import { Stamp } from '@/types';
+import type { Stamp } from '@/types';
 import { useCanvasContext } from '@/context/useCanvasContext';
 
 interface StampUploadProps {
