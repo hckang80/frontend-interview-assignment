@@ -21,7 +21,7 @@ const PdfPages = () => {
       setLoading(true);
       const { totalPages, pdf } = await loadPdf(file);
 
-      const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
+      const pageNumbers = Array.from({ length: totalPages }, (_, i) => i);
       const loadedImages = await Promise.all(
         pageNumbers.map(async (pageNumber) => ({
           id: crypto.randomUUID(),
@@ -39,15 +39,15 @@ const PdfPages = () => {
       <div className={styles.top}>
         {file &&
           fileImages.map(({ id, url }, index) => (
-            <div key={id} onClick={() => setSelectedPageFileIndex(index + 1)}>
+            <div key={id} onClick={() => setSelectedPageFileIndex(index)}>
               <button
                 disabled={loading}
-                className={isActive(index + 1) ? styles.buttonActive : styles.button}
+                className={isActive(index) ? styles.buttonActive : styles.button}
               >
                 <img src={url} alt="" className={styles.imageContent} />
-                <Loading loading={loading && isActive(index + 1)} />
+                <Loading loading={loading && isActive(index)} />
               </button>
-              <div className={isActive(index + 1) ? styles.imageIndexActive : styles.imageIndex}>
+              <div className={isActive(index) ? styles.imageIndexActive : styles.imageIndex}>
                 {index + 1}
               </div>
             </div>
