@@ -42,7 +42,9 @@ const PdfPages = () => {
             <div key={id}>
               <button
                 disabled={loading}
-                className={isActive(index) ? styles.buttonActive : styles.button}
+                className={
+                  fileImages.length > 1 && isActive(index) ? styles.buttonActive : styles.button
+                }
                 onClick={() => setSelectedPageFileIndex(index)}
               >
                 <img src={url} alt="" className={styles.imageContent} />
