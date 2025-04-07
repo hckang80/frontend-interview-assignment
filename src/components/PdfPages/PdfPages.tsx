@@ -1,20 +1,13 @@
-import { CSSProperties, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useFileStore } from '@/store';
 
 import * as styles from './PdfPages.css.ts';
 import { getImageByPdf, loadPdf } from '../../utils/index.ts';
-import SyncLoader from 'react-spinners/SyncLoader';
+import { Loading } from '../shared';
 
 type FileImage = {
   id: string;
   url: string;
-};
-
-const override: CSSProperties = {
-  position: 'absolute',
-  left: '50%',
-  top: '50%',
-  transform: 'translate(-50%, -50%)'
 };
 
 const PdfPages = () => {
@@ -56,14 +49,7 @@ const PdfPages = () => {
                 className={isActive(index + 1) ? styles.buttonActive : styles.button}
               >
                 <img src={url} alt="" className={styles.imageContent} />
-                <SyncLoader
-                  loading={loading && isActive(index + 1)}
-                  cssOverride={override}
-                  color="var(--primary)"
-                  size={10}
-                  aria-label="Loading Spinner"
-                  data-testid="loader"
-                />
+                <Loading loading={loading && isActive(index + 1)} />
               </button>
               <div className={isActive(index + 1) ? styles.imageIndexActive : styles.imageIndex}>
                 {index + 1}
