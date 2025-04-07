@@ -39,10 +39,11 @@ const PdfPages = () => {
       <div className={styles.top}>
         {file &&
           fileImages.map(({ id, url }, index) => (
-            <div key={id} onClick={() => setSelectedPageFileIndex(index)}>
+            <div key={id}>
               <button
                 disabled={loading}
                 className={isActive(index) ? styles.buttonActive : styles.button}
+                onClick={() => setSelectedPageFileIndex(index)}
               >
                 <img src={url} alt="" className={styles.imageContent} />
                 <Loading loading={loading && isActive(index)} />
